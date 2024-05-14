@@ -2,7 +2,12 @@
     display: block;
     margin: 1em;
 }
-form {
-    border: solid blue
+body {
+    border: double blue;
+    width: 50%
+}
+
+h1 {
+    color: blue;
 }
 
