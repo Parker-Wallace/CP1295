@@ -1,0 +1,13 @@
+.formrow {
+    display: block;
+    margin: 1em;
+}
+body {
+    border: double blue;
+    width: 50%
+}
+
+h1 {
+    color: blue;
+}
+

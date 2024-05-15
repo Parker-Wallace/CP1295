@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>CNA Rail System</h1>
+    <form id="BoxCarForm">
+        <div class="formrow">        
+            <label for="BoxCarID">Box Car ID</label>
+            <input id="BoxCarID" type="text" readonly value="BX500">
+        </div>
+        <div class="formrow">      
+            <label for="EmptyWeight">Empty Weight</label>
+            <input id="EmptyWeight" type="text" readonly value="15000">
+        </div>       
+        <div class="formrow"> 
+            <label for="TotalWeight">Total Weight</label>
+            <input id="TotalWeight" type="text" readonly value="0">
+        </div>
+        <div class="formrow"> 
+            <button disabled>Process Box Car</button>
+            <button disabled>Reset Form</button>
+        </div>
+    </form>
+    <div id="CargoProcessingDiv">
+    <form id="CargoProcessingForm" action="">
+        <div class="formrow">         
+            <label for="TransportID">Trasport ID</label>
+            <input type="text" id="TransportID"></div>
+        <div class="formrow">        
+            <label for="Description">Description</label>
+            <input type="text" id="Description"> </div>
+        <div class="formrow">         
+            <label for="CargoWeight">Cargo Weight</label>
+            <input type="text" id="CargoWeight"></div>
+        <div class="formrow"> 
+            <button type="submit">Process Cargo</button>
+            <button type="reset">Reset Form</button> </div>
+    </form>
+       <script src="process_cargo.js"></script> 
+</div>
+
+</body>
+
+</html>
