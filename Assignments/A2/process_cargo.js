@@ -1,16 +1,28 @@
 $(document).ready(function () {
     $("#CargoProcessingForm").on("submit", (event) => {
-
+        $("#cargoProcessingErrorMessage").empty();
         event.preventDefault(); // prevent form submission
-
+        if ($("#transportId").val() == "" | $("#description").val() == "" | $("#cargoWeight").val() == "") {
+            $("#cargoProcessingErrorMessage").text("blank field detected, please fill all fields")
+            return
+        }
+        else if (parseInt($("#cargoWeight")) +  parseInt($("#currentWeight")) > parseInt($("#maxWeight"))) {
+            window.alert("Max weight for cargo exceeded ")
+            return
+        }
+        else if (isNaN(parseInt($("#cargoWeight").val()))) {
+            window.alert("Cargo weight is not a numeric value")
+            return
+        }
+        
         // Create a table for box car manifest if it doesn't already exist
-        var boxCarID = $("#BoxCarID").val();
-        if ($(`#${boxCarID}`).length === 0) {
+        var boxCarId = $("#boxCarId").val();
+        if ($(`#${boxCarId}`).length === 0) {
             // Create label for the manifest table
-            var manifestLabel = $("<label></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarID}`);
+            var manifestLabel = $("<label></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarId}`);
 
             // Create a table with id = boxcarid
-            var table = $("<table></table>").attr("id", boxCarID);
+            var table = $("<table></table>").attr("id", boxCarId);
 
             var tableheader = $("<tr></tr>"); // Create table header
 
@@ -39,12 +51,12 @@ $(document).ready(function () {
         var DataRow = $("<tr></tr>");
 
         // Append information to row
-        DataRow.append($("<td></td>").text($("#TransportID").val()));
-        DataRow.append($("<td></td>").text($("#Description").val()));
-        DataRow.append($("<td></td>").text($("#CargoWeight").val()));
+        DataRow.append($("<td></td>").text($("#transportId").val()));
+        DataRow.append($("<td></td>").text($("#description").val()));
+        DataRow.append($("<td></td>").text($("#cargoWeight").val()));
 
         // Insert the new row before the last row of the table
-        $(`#${boxCarID} tr:last`).before(DataRow);
+        $(`#${boxCarId} tr:last`).before(DataRow);
         
         //update the total weight box
         $("#totalWeight").text(parseInt($("#totalWeight").text()) + parseInt($("#CargoWeight").val()));

@@ -11,16 +11,20 @@
     <h1>CNA Rail System</h1>
     <form id="BoxCarForm">
         <div class="formrow">        
-            <label for="BoxCarID">Box Car ID</label>
-            <input id="BoxCarID" type="text" readonly value="BX500">
+            <label for="boxCarId">Box Car ID</label>
+            <input id="boxCarId" type="text" readonly value="BX500">
         </div>
         <div class="formrow">      
-            <label for="EmptyWeight">Empty Weight</label>
-            <input id="EmptyWeight" type="text" readonly value="15000">
+            <label for="emptyWeight">Empty Weight</label>
+            <input id="emptyWeight" type="text" readonly value="15000">
         </div>       
+        <div class="formrow">        
+            <label for="maxWeight">Max Weight</label>
+            <input id="maxWeight" type="text" readonly value="105000">
+        </div>
         <div class="formrow"> 
-            <label for="TotalWeight">Total Weight</label>
-            <input id="TotalWeight" type="text" readonly value="0">
+            <label for="currentWeight">Total Weight</label>
+            <input id="currentWeight" type="text" readonly value="0">
         </div>
         <div class="formrow"> 
             <button disabled>Process Box Car</button>
@@ -30,17 +34,18 @@
     <div id="CargoProcessingDiv">
     <form id="CargoProcessingForm" action="">
         <div class="formrow">         
-            <label for="TransportID">Trasport ID</label>
+            <label for="transportId">Trasport ID</label>
             <input type="text" id="TransportID"></div>
         <div class="formrow">        
-            <label for="Description">Description</label>
-            <input type="text" id="Description"> </div>
+            <label for="description">Description</label>
+            <input type="text" id="description"> </div>
         <div class="formrow">         
-            <label for="CargoWeight">Cargo Weight</label>
-            <input type="text" id="CargoWeight"></div>
+            <label for="cargoWeight">Cargo Weight</label>
+            <input type="text" id="cargoWeight"></div>
         <div class="formrow"> 
             <button type="submit">Process Cargo</button>
-            <button type="reset">Reset Form</button> </div>
+            <button type="reset">Reset Form</button> 
+            <span id="cargoProcessingErrorMessage"></span></div>
     </form>
        <script src="process_cargo.js"></script> 
 </div>
