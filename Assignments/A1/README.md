@@ -232,7 +232,7 @@ A |Name, Student #, Assignment # on Page 1| 5
 B1| HTML file contained Box Car Form |2 
 B2 |HTML file contained Process Cargo Form |2 
 B3| HTML FORM was LIMITED only to B1 and B2 contents| 4    
-||**BOX CAR FORM (BCM)**
+||**BOX CAR FORM (BCM)**|
 C1| Box Car ID / Text Field RO default set BX500| 4 
 C2| Empty Weight / Text Field RO default set 15000| 4 
 C3| Total Weight / Text Field RO default set 0 |4 

@@ -1,7 +1,7 @@
 $(document).ready(function () {
 
     $("#currentWeight").val($("#emptyWeight").val())
-
+    $('#CargoProcessingForm').after("<div id=CargoManifestDiv></div>");
 
     $("#CargoProcessingForm").on("submit", (event) => {
         $("#cargoProcessingErrorMessage").empty();
@@ -14,7 +14,7 @@ $(document).ready(function () {
             $("#cargoProcessingErrorMessage").text("Cargo weight is not a numeric value")
             return
         }
-        else if (parseInt($("#cargoWeight").val()) > parseInt($("#maxWeight").val()) || parseInt($("#cargoWeight")) < 0 ) {
+        else if (parseInt($("#cargoWeight").val()) + parseInt($("#emptyWeight").val()) > parseInt($("#maxWeight").val()) || parseInt($("#cargoWeight")) < 0 ) {
             $("#cargoProcessingErrorMessage").text("Max weight for cargo exceeded ")
             return
         }
@@ -44,7 +44,7 @@ function createManifest (boxCarId) {
     // Create a table for box car manifest if it doesn't already exist
    
         // Create label for the manifest table
-        var manifestLabel = $("<label></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarId}`);
+        var manifestLabel = $("<label class='tableHeader></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarId}`);
 
         // Create a table with id = boxcarid
         var table = $("<table></table>").attr("id", boxCarId);
@@ -66,10 +66,10 @@ function createManifest (boxCarId) {
         totalWeightRow.append($("<td id='totalWeight'></td>").text("0"))
 
         // Append table elements
+        $("#CargoManifestDiv").append(manifestLabel);
         table.append(tableheader);
         table.append(totalWeightRow);
-        manifestLabel.append(table);
-        $("#CargoProcessingForm").append(manifestLabel);
+        $("#CargoManifestDiv").append(table);
     }
 
 function createCargoStatus () {    
@@ -101,8 +101,9 @@ function createCargoStatus () {
 
     // Append table elements
     table.append(tableheader);
-    manifestLabel.append(table);
-    $("#CargoProcessingForm").append(manifestLabel);
+    $("#CargoManifestDiv").append(statusLabel);
+    $("#CargoManifestDiv").append(table);
+
 }
 
 function addToManifest(boxCarId) {
