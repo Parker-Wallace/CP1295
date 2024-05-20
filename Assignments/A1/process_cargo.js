@@ -1,4 +1,7 @@
 $(document).ready(function () {
+    $("#TotalWeight").val($("#EmptyWeight").val())
+    $('#CargoProcessingForm').after("<div id=CargoManifestDiv></div>");
+
     $("#CargoProcessingForm").on("submit", (event) => {
 
         event.preventDefault(); // prevent form submission
@@ -7,7 +10,7 @@ $(document).ready(function () {
         var boxCarID = $("#BoxCarID").val();
         if ($(`#${boxCarID}`).length === 0) {
             // Create label for the manifest table
-            var manifestLabel = $("<label></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarID}`);
+            var manifestLabel = $("<label class='tableHeader'></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarID}`);
 
             // Create a table with id = boxcarid
             var table = $("<table></table>").attr("id", boxCarID);
@@ -26,13 +29,14 @@ $(document).ready(function () {
 
             // Create total weight row
             var totalWeightRow = $("<tr><td colspan='2'>Total Cargo Weight</td></tr>");
-            totalWeightRow.append($("<td id='totalWeight'></td>").text("0"))
+            totalWeightRow.append($("<td id='CurrentWeight'></td>").text("0"))
 
             // Append table elements
+            $("#CargoManifestDiv").append(manifestLabel);
             table.append(tableheader);
             table.append(totalWeightRow);
-            manifestLabel.append(table);
-            $("#CargoProcessingForm").append(manifestLabel);
+            $("#CargoManifestDiv").append(table);
+            
         }
 
         // Create a new row for the form data
@@ -47,8 +51,8 @@ $(document).ready(function () {
         $(`#${boxCarID} tr:last`).before(DataRow);
         
         //update the total weight box
-        $("#totalWeight").text(parseInt($("#totalWeight").text()) + parseInt($("#CargoWeight").val()));
-
+        $("#CurrentWeight").text(parseInt($("#CurrentWeight").text()) + parseInt($("#CargoWeight").val()));
+        $("#TotalWeight").val(parseInt($("#TotalWeight").val()) + parseInt($("#CargoWeight").val()));
       
     });
 });

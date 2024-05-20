@@ -45,7 +45,6 @@ function createManifest (boxCarId) {
    
         // Create label for the manifest table
         var manifestLabel = $("<label></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarId}`);
-        manifestLabel.attr('class', 'tableHeader')
 
         // Create a table with id = boxcarid
         var table = $("<table></table>").attr("id", boxCarId);
