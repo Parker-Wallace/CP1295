@@ -27,6 +27,7 @@ const tick = () => {
   $("#timer_id").value = master_clock_var;
   if ($("#battery_drain_id").checked) {
     if (power_level_var + (power_level_step_var * $("#speed_KMM_id").value) >= 0) {
+      //drive
       message.textContent = "Driving"
       power_level_var += (power_level_step_var * $("#speed_KMM_id").value)
       $("#battery_power_id").value = power_level_var
@@ -35,6 +36,9 @@ const tick = () => {
     else {
       //stop driving
       message.textContent = "Battery depleted"
+      power_level_var = 0
+      $("#battery_min_id").value = power_level_var
+      $("#battery_power_id").value = power_level_var
       $("#battery_drain_id").unchecked
 
     }
@@ -61,7 +65,7 @@ const start_timer = () => {
   // Using an Interval Timer
   message.textContent = "Simulator Started"
   master_clock_step_var = 1;
-  master_interval = setInterval(tick, 500);
+  master_interval = setInterval(tick, 2000);
 
 }
 
@@ -70,6 +74,7 @@ const reset_system = () => {
   clearInterval(master_interval)
   master_clock_var = 0
   $("#timer_id").value = master_clock_var;
+  message.textContent = "Reset Simulator"
 }
 
 const charge_battery = () => {
@@ -83,9 +88,14 @@ const charge_battery = () => {
 }
 
 const update_KMM = () => {
+  if ($("#speed_KMH_id").value > 0 && $("#speed_KMH_id").value < 241) {
+    $("#speed_KMH_id").nextElementSibling.textContent = ""
   $("#speed_KMM_id").value = ($("#speed_KMH_id").value / 60)
   $("#battery_min_id").value = power_level_var / $("#speed_KMM_id").value
-}
+  }
+  else {
+    $("#speed_KMH_id").nextElementSibling.textContent = "invalid input"
+  }}
 
 
 const drive_car = () => {
@@ -104,5 +114,5 @@ document.addEventListener("DOMContentLoaded",
     $("#drive_car_btn").addEventListener("click", drive_car);
     $("#start_btn").addEventListener("click", start_timer);
     $("#reset_btn").addEventListener("click", reset_system);
-    $("#speed_KMH_id").addEventListener("change", update_KMM);
+    $("#speed_KMH_id").addEventListener("input", update_KMM);
   });
