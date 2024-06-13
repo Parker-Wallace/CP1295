@@ -10,7 +10,8 @@ $(document).ready(function () {
         var boxCarID = $("#BoxCarID").val();
         if ($(`#${boxCarID}`).length === 0) {
             // Create label for the manifest table
-            var manifestLabel = $("<label class='tableHeader'></label>").text(`Cargo Box Car Manifest for Box Car ${boxCarID}`);
+            var manifestLabel = $("<label class='tableHeader'></label>")
+            manifestLabel.text(`Cargo Box Car Manifest for Box Car ${boxCarID}`);
 
             // Create a table with id = boxcarid
             var table = $("<table></table>").attr("id", boxCarID);
