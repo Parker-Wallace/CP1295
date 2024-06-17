@@ -187,7 +187,7 @@ Items missed are marks that you will not receive.
 
 ## G. Submission Requirements 
  
-Generate a word document called Assignment 02 – Your name and student number. 
+Generate a word document called Assignment 03 – Your name and student number. 
  
 ### Page 1
 
