@@ -39,7 +39,7 @@ There are 7 DIV sections. Each will be considered to be a pseudo Page.
 3.  The `blue` text is informational and will not be displayed on the web page.
 4.  The `red` text indicate activity requirements of various components.
 
-![alt text](image.png)
+![alt text](image-9.png)
 
 This is the Main Menu page. It will be contained within
 
@@ -71,8 +71,7 @@ The three initial data entry requirements
 
 Read the `Red` and `Blue` information notes to ensure that the definitions are understood.
 
-![alt text](image-1.png)
-
+![alt text](image-8.png)
 (Item #3) Display divC. DivC is displayed on the screen at the same time as DivB as required.
 
 Each of the three buttons will have specific task requirements. Three buttons, each will have its own list
