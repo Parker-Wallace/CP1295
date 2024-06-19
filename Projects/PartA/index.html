@@ -6,6 +6,7 @@
     <title>Document</title>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
     <Script src="Main.js"></Script>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="divA">
@@ -23,20 +24,30 @@
     </div>
     <div id="divB" hidden>
         <h1>Div B</h1>
-        <form>
-        <label for="Boxcar_ID_input"></label>
-        <input id="Boxcar_ID_input" type="text">
-        <label for="TAREWeight_input"></label>
-        <input id="TAREWeight_input"  type="text">
-        <label for="Max_Gross_Weight_input"></label>
-        <input id="Max_Gross_Weight_input"  type="text">
-        <label for="DivB_Cargo_Weight_input"></label>
-        <input id="DivB_Cargo_Weight_input"  type="text">
-        <label for="Gross_Weight_input"></label>
-        <input id="Gross_Weight_input"  type="text">
-        <button>Process Box Car</button>
-        <button>Reset Form</button>
-    </form>
+        <form name="create_boxcar">   
+        <label for="Boxcar_ID_input">Boxcar ID:</label>
+        <input id="Boxcar_ID_input" name="boxcar_id" type="text" required pattern="BX\d{3}">
+        <span></span>
+
+        <label for="TAREWeight_input">TARE weight</label>
+        <input id="TAREWeight_input"  type="number" min="0" max="20000">
+        <span></span>
+
+        <label for="Max_Gross_Weight_input">Max Gross Weight</label>
+        <input id="Max_Gross_Weight_input" type="number" min="0" max="200000">
+        <span></span>
+
+        <label for="DivB_Cargo_Weight_input" >Cargo Weight</label>
+        <input id="DivB_Cargo_Weight_input" disabled value="0" type="text">
+        <span></span>
+
+        <label for="Gross_Weight_input">Gross Weight</label>
+        <input id="Gross_Weight_input"  disabled type="text">
+        <span></span>
+
+        <button type="submit">Process Box Car</button>
+        <button type="reset">Reset Form</button>
+        </form>
         <button class="Return_to_main_page_btn">Return To Main Page</button>
     </div>
     <div id="divC" hidden>
