@@ -26,23 +26,24 @@
         <h1>Div B</h1>
         <form name="create_boxcar">   
         <label for="Boxcar_ID_input">Boxcar ID:</label>
-        <input id="Boxcar_ID_input" name="boxcar_id" type="text" required pattern="BX\d{3}">
+        <!-- pattern="BX\d{3}" -->
+         <input id="Boxcar_ID_input" name="boxcar_id" type="text" required  > 
         <span></span>
 
         <label for="TAREWeight_input">TARE weight</label>
-        <input id="TAREWeight_input"  type="number" min="0" max="20000">
+        <input id="TAREWeight_input" name="tare_weight" type="number" min="0" max="20000">
         <span></span>
 
         <label for="Max_Gross_Weight_input">Max Gross Weight</label>
-        <input id="Max_Gross_Weight_input" type="number" min="0" max="200000">
+        <input id="Max_Gross_Weight_input" name="max_gross_weight" type="number" min="0" max="200000">
         <span></span>
 
         <label for="DivB_Cargo_Weight_input" >Cargo Weight</label>
-        <input id="DivB_Cargo_Weight_input" disabled value="0" type="text">
+        <input id="DivB_Cargo_Weight_input" name="cargo_weight" disabled value="0" type="text">
         <span></span>
 
         <label for="Gross_Weight_input">Gross Weight</label>
-        <input id="Gross_Weight_input"  disabled type="text">
+        <input id="Gross_Weight_input"  name="gross_weight" disabled type="text">
         <span></span>
 
         <button type="submit">Process Box Car</button>
@@ -62,6 +63,8 @@
                     <th>Gross</th>
                 </tr>    
             </thead>
+            <tbody>
+            </tbody>
             </table>
         <span id="Total_cargo_weight_span"></span>
         <button>Return to Create Box Car</button>
