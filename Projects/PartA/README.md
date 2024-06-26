@@ -39,7 +39,7 @@ There are 7 DIV sections. Each will be considered to be a pseudo Page.
 3.  The `blue` text is informational and will not be displayed on the web page.
 4.  The `red` text indicate activity requirements of various components.
 
-![alt text](image-9.png)
+![alt text](images/image-9.png)
 
 This is the Main Menu page. It will be contained within
 
@@ -71,7 +71,7 @@ The three initial data entry requirements
 
 Read the `Red` and `Blue` information notes to ensure that the definitions are understood.
 
-![alt text](image-8.png)
+![alt text](images/image-8.png)
 (Item #3) Display divC. DivC is displayed on the screen at the same time as DivB as required.
 
 Each of the three buttons will have specific task requirements. Three buttons, each will have its own list
@@ -89,7 +89,7 @@ displayed on this form.
 A total Cargo weight is required
 as a foot display item.
 
-![alt text](image-2.png)
+![alt text](images/image-2.png)
 
 Two button choices. Ensure basic display housekeeping. Turn of current <div>s and Turn on Destination
 
@@ -101,7 +101,7 @@ elements in each row.
 
 E. Add Freight - divD
 
-![alt text](image-3.png)
+![alt text](images/image-3.png)
 
 Once you have selected a box car from the list you can enter a Freight entry for the selected box car.
 It will require the usual validation process. If the additional weight of the entry will put the boxcar over
@@ -118,7 +118,7 @@ F. Display Box Car Manifest – divE
 
 This `<divE>` will appear with `<divD>` in the sequence `<divD>` followed by `<divE>`. All `<div>` elements will
 appear on the screen in alphabetical order when two or more appear together.
-![alt text](image-4.png)
+![alt text](images/image-4.png)
 
 This will display the box
 car manifest that just
@@ -137,7 +137,7 @@ G. Display Warehouse Manifest – divF
 This <divF> will appear with <divD> in the sequence <divD> followed by <divF>. All <div> elements will
 appear on the screen in alphabetical order when two or more appear together.
 
-![alt text](image-5.png)
+![alt text](images/image-5.png)
 
 This is similar to the boxcar manifest. All of these Freight items were placed in the warehouse and
 therfore have become part of the warehouse manifest.
@@ -153,7 +153,7 @@ H. Display All Freight – divG
 This is the simplest of the forms.
 This is called only from <divA> Main menu directly.
 
-![alt text](image-6.png)
+![alt text](images/image-6.png)
 
 All freight items are displayed. (In Boxcars and Warehouse).
 The Status indicates the Boxcar ID or Warehouse depending on where the Freight item was placed.
@@ -251,7 +251,7 @@ o. On the opening page, activate the “All Freight Status” button and generat
 created Freight Items. Take a screen shot. This will be Page 10 content. Code is FTR 10. 9 Freight Items
 should be displayed. 2 of these are in Warehouse.
 
-![alt text](image-7.png)
+![alt text](images/image-7.png)
 
 End of data testing.
 
