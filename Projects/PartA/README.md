@@ -91,12 +91,12 @@ as a foot display item.
 
 ![alt text](images/image-2.png)
 
-Two button choices. Ensure basic display housekeeping. Turn of current <div>s and Turn on Destination
+Two button choices. Ensure basic display housekeeping. Turn of current `<div>`'s and Turn on Destination
 
-<div>. Reset form requires blanking all input data so when this <div> is required again, it will appear as it 
+`<div>`. Reset form requires blanking all input data so when this `<div>` is required again, it will appear as it 
 it was the first time called.  
-All of the <div> forms are based on this button logic. 
-*** Note: The display shown is not accurately displayed. Each row has 5 columns. There are 5 <td> 
+All of the `<div>` forms are based on this button logic. 
+*** Note: The display shown is not accurately displayed. Each row has 5 columns. There are 5 `<td>`
 elements in each row.
 
 E. Add Freight - divD

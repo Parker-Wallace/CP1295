@@ -4,6 +4,14 @@
 */
 var Configured_Box_Cars = []
 
+function boxcar(ID, tareWeight, maxGrossWeight, cargoWeight, grossWeight) {
+    this.ID = ID
+    this.tareWeight = tareWeight
+    this.maxGrossWeight = maxGrossWeight
+    this.cargoWeight = cargoWeight
+    this.grossWeight = grossWeight
+}
+
 function Handle_manu_button_selection(event) {
     console.log('pressed')
     $(this).parent().toggle()
@@ -42,28 +50,37 @@ function validate_create_boxcar(event){
         $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200000")}
     // if all conditions pass add the box car to the array
     else {
-        FormData = {}
-        $(this).find("input").each(function() {
-            let id = $(this).attr("name")
-            let value = $(this).val()
-            FormData[id] = value
-        })
-        Configured_Box_Cars.push(FormData)
+
+        Configured_Box_Cars.push(new boxcar(
+        $(this[0]).val(),
+        $(this[1]).val(),
+        $(this[2]).val(),
+        $(this[3]).val(),
+        $(this[4]).val()
+        ))
         display_box_cars()
     }
 }
 
 function display_box_cars() {
     divCTableBody = $("#divC").find("tbody")
-
+    divCTableFooter = $("#divC").find("tfoot")
     if (Configured_Box_Cars.length > 0) {
         $("#divC").show();
         divCTableBody.empty()
+        divCTableFooter.empty()
+        console.log(Configured_Box_Cars)
+        let totalCargoWeight = 0;
         Configured_Box_Cars.forEach(Boxcar => {
-            console.log(Boxcar)
             divCTableBody.append(`<tr>`);
-            divCTableBody.append(`<td>${Boxcar.boxcar_id}</td>`);       
+            divCTableBody.append(`<td>${Boxcar.ID}</td>`);
+            divCTableBody.append(`<td>${Boxcar.tareWeight}</td>`); 
+            divCTableBody.append(`<td>${Boxcar.maxGrossWeight}</td>`); 
+            divCTableBody.append(`<td>${Boxcar.cargoWeight}</td>`); 
+            divCTableBody.append(`<td>${Boxcar.grossWeight}</td>`); 
+            totalCargoWeight += parseInt(Boxcar.cargoWeight)
         });
+        divCTableFooter.append(`total cargo weight: ${totalCargoWeight}`)
     }
 } 
 
@@ -79,5 +96,10 @@ $(document).ready(function () {
     $("#DivB_Cargo_Weight_input").change(()=>{
         console.log("chneg")
         $("#Gross_Weight_input").val() = this.val() + parseInt($("#TAREWeight_input").val())
+    })
+
+    $('#return_to_create_box_car_btn').on('click', ()=>{
+        $('#divC').hide()
+        $('[name="create_boxcar"]')[0].reset()
     })
 });
