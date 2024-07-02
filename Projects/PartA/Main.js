@@ -12,11 +12,6 @@ function boxcar(ID, tareWeight, maxGrossWeight, cargoWeight, grossWeight) {
     this.grossWeight = grossWeight
 }
 
-function Handle_manu_button_selection(event) {
-    console.log('pressed')
-    $(this).parent().toggle()
-    $(`body div:nth-child(${event.target.getAttribute("data-index")})`).toggle()
-}
 
 function Handle_return_to_menu() {
     $("div").hide();
@@ -84,10 +79,23 @@ function display_box_cars() {
     }
 } 
 
+
+function DisplayDivD () {
+    divDTableBody = $("#divD").find("tbody")
+    Configured_Box_Cars.forEach(Boxcar => {
+        divDTableBody.append(`<td>${Boxcar.ID}</td>`)
+    })
+}
+
 $(document).ready(function () {
     //main menu event listeners
     $("[name='menu']").prop('checked', false)
-    $("[name='menu']").on("change", Handle_manu_button_selection)
+    $("#Create_boxcar_radio_btn").on('change',)
+    $("#Add_freight_radio_btn").on('change',)
+    $("#Boxcar_data_radio_btn").on('change',)
+    $("#Warehouse_data_radio_btn").on('change',)
+    $("#All_freight_status_radio_btn").on('change',)
+
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
 
     //divb event listeners
