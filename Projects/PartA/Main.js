@@ -53,11 +53,11 @@ function validate_create_boxcar(event){
         $(this[3]).val(),
         $(this[4]).val()
         ))
-        display_box_cars()
+        DisplayDivC()
     }
 }
 
-function display_box_cars() {
+function DisplayDivC() {
     divCTableBody = $("#divC").find("tbody")
     divCTableFooter = $("#divC").find("tfoot")
     if (Configured_Box_Cars.length > 0) {
@@ -75,23 +75,32 @@ function display_box_cars() {
             divCTableBody.append(`<td>${Boxcar.grossWeight}</td>`); 
             totalCargoWeight += parseInt(Boxcar.cargoWeight)
         });
-        divCTableFooter.append(`total cargo weight: ${totalCargoWeight}`)
+        divCTableFooter.append(`Total Cargo Weight: ${totalCargoWeight}`)
     }
 } 
 
 
 function DisplayDivD () {
-    divDTableBody = $("#divD").find("tbody")
+    $("#divA").hide();
+    $("#divD").show();
+    divDTableBody = $("#divD").find("tbody");
+    divDTableBody.append(`<tr>`);
     Configured_Box_Cars.forEach(Boxcar => {
-        divDTableBody.append(`<td>${Boxcar.ID}</td>`)
-    })
+        divDTableBody.append(`<td>${Boxcar.ID}</td>`);
+    });
 }
 
-$(document).ready(function () {
+function DisplayDivB () {
+    $("#divA").hide();
+    $("#divB").show();
+    DisplayDivC();
+}
+
+$(function () {
     //main menu event listeners
     $("[name='menu']").prop('checked', false)
-    $("#Create_boxcar_radio_btn").on('change',)
-    $("#Add_freight_radio_btn").on('change',)
+    $("#Create_boxcar_radio_btn").on('change', DisplayDivB)
+    $("#Add_freight_radio_btn").on("change", DisplayDivD)
     $("#Boxcar_data_radio_btn").on('change',)
     $("#Warehouse_data_radio_btn").on('change',)
     $("#All_freight_status_radio_btn").on('change',)
