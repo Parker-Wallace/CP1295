@@ -2,7 +2,9 @@
  * add functionality on divb for calculating gross weight and cargo weight
  * make it such that div c shows udirng the initla div b load if there is data
 */
-var Configured_Box_Cars = []
+
+var Configured_Box_Cars = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
+// var Configured_Box_Cars = []
 
 function boxcar(ID, tareWeight, maxGrossWeight, cargoWeight, grossWeight) {
     this.ID = ID
@@ -12,6 +14,15 @@ function boxcar(ID, tareWeight, maxGrossWeight, cargoWeight, grossWeight) {
     this.grossWeight = grossWeight
 }
 
+function GENERATERANDOMBOXCAR() {
+    return new boxcar(
+        "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
+        (Math.floor(Math.random() * (500 - 100) ) + 100),
+        (Math.floor(Math.random() * (999 - 500) ) + 500),
+        0,
+        0
+    )
+}
 
 function Handle_return_to_menu() {
     $("div").hide();
@@ -83,11 +94,21 @@ function DisplayDivC() {
 function DisplayDivD () {
     $("#divA").hide();
     $("#divD").show();
+    $("#cargoForm :input").prop("disabled", true);
     divDTableBody = $("#divD").find("tbody");
-    divDTableBody.append(`<tr>`);
+    divDTableBody.addClass("selectabletable")
+    divDTableBody.empty()
     Configured_Box_Cars.forEach(Boxcar => {
+        divDTableBody.append(document.createElement("tr"))
         divDTableBody.append(`<td>${Boxcar.ID}</td>`);
     });
+    
+    $("td").on("click", ()=>{
+        divDTableBody.prop("disabled", true);
+        divDTableBody.removeClass("selectabletable")
+        $("#cargoForm :input").prop("disabled", false);
+    })
+
 }
 
 function DisplayDivB () {
