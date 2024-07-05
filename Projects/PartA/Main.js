@@ -68,6 +68,13 @@ function validate_create_boxcar(event){
     }
 }
 
+function DisplayDivB () {
+    $("#divA").hide();
+    $("#divB").show();
+    $("form").on("submit", validate_create_boxcar)
+    DisplayDivC();
+}
+
 function DisplayDivC() {
     divCTableBody = $("#divC").find("tbody")
     divCTableFooter = $("#divC").find("tfoot")
@@ -90,7 +97,6 @@ function DisplayDivC() {
     }
 } 
 
-
 function DisplayDivD () {
     $("#divA").hide();
     $("#divD").show();
@@ -111,12 +117,6 @@ function DisplayDivD () {
 
 }
 
-function DisplayDivB () {
-    $("#divA").hide();
-    $("#divB").show();
-    DisplayDivC();
-}
-
 $(function () {
     //main menu event listeners
     $("[name='menu']").prop('checked', false)
@@ -129,7 +129,7 @@ $(function () {
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
 
     //divb event listeners
-    $("form[name='create_boxcar'").on("submit", validate_create_boxcar)
+   
 
     $("#DivB_Cargo_Weight_input").change(()=>{
         console.log("chneg")
