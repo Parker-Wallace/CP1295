@@ -92,3 +92,23 @@ return to main page button
 - ensure > 0 and `isNAN` testing
 - if added to boxcar on process display div D and div E
 otherwise Div D and div F
+
+## div E
+box car manifest
+always diplayed with div D
+table
+headers
+transport id
+descrioption
+weight
+footer
+total cargo weight
+buttons
+return to create freight entry
+- hide div E
+- reset div D as if new
+return to main page
+## div f
+warehouse maifest
+same as div E
+## div g

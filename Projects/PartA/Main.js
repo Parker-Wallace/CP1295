@@ -2,16 +2,25 @@
  * add functionality on divb for calculating gross weight and cargo weight
  * make it such that div c shows udirng the initla div b load if there is data
 */
-
+var WAREHOUSEMANIFEST = []
 var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
 // var Configured_Box_Cars = []
 
-function boxcar(ID, tareWeight, maxGrossWeight, cargoWeight, grossWeight) {
-    this.ID = ID
+function boxcar(Id, tareWeight, maxGrossWeight) {
+    this.Id = Id
     this.tareWeight = tareWeight
     this.maxGrossWeight = maxGrossWeight
-    this.cargoWeight = cargoWeight
-    this.grossWeight = grossWeight
+    this.maxCargoWeight = maxGrossWeight - tareWeight
+    this.cargo = []
+    this.cargoWeight = () => {
+        return this.cargo.reduce(function (acc, obj) { return acc + obj.weight; }, 0);
+    }}
+
+function cargo(transportId, description, weight, status) {
+    this.transportId = transportId
+    this.description = description
+    this.weight = weight
+    this.status = status
 }
 
 function GENERATERANDOMBOXCAR() {
@@ -19,8 +28,6 @@ function GENERATERANDOMBOXCAR() {
         "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
         (Math.floor(Math.random() * (500 - 100) ) + 100),
         (Math.floor(Math.random() * (999 - 500) ) + 500),
-        0,
-        0
     )
 }
 
@@ -34,7 +41,7 @@ function Handle_return_to_menu() {
 
 
 function DisplayDivB () {
-    $("#divA, #divB").toggle();
+    $("#divB").toggle();
     $("form").on("submit", validate_create_boxcar)
     DisplayDivC();
     
@@ -87,7 +94,7 @@ function DisplayDivC() {
         let totalCargoWeight = 0;
         CONFIGUREDBOXCARS.forEach(Boxcar => {
             divCTableBody.append(`<tr>`);
-            divCTableBody.append(`<td>${Boxcar.ID}</td>`);
+            divCTableBody.append(`<td>${Boxcar.Id}</td>`);
             divCTableBody.append(`<td>${Boxcar.tareWeight}</td>`); 
             divCTableBody.append(`<td>${Boxcar.maxGrossWeight}</td>`); 
             divCTableBody.append(`<td>${Boxcar.cargoWeight}</td>`); 
@@ -99,32 +106,105 @@ function DisplayDivC() {
 } 
 
 function DisplayDivD () {
-    $("#divA, #divD").toggle();
+    $("#divD").toggle();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
+    let divDTableBody = $("#divD").find("tbody");
+    let maxCargoWeight = 0;
+    let cargoEntryForm = $("form")
+    cargoEntryForm.off()
     $("#cargoForm :input").prop("disabled", true);
-    divDTableBody = $("#divD").find("tbody");
     divDTableBody.addClass("selectabletable");
     divDTableBody.empty();
     CONFIGUREDBOXCARS.forEach(Boxcar => {
-        divDTableBody.append(document.createElement("tr"));
         let boxcarIdCell = document.createElement("td");
-
+        let boxcarIdRow = document.createElement("tr");
+        divDTableBody.append(boxcarIdRow);
         $(boxcarIdCell).on('click', ()=>{   
         divDTableBody.prop("disabled", true);
         divDTableBody.removeClass("selectabletable");
         $("#cargoForm :input").prop("disabled", false);
-        boxCarSelectedValue.val(Boxcar.ID)
+        boxCarSelectedValue.val(Boxcar.Id)
+        maxCargoWeight = Boxcar.maxCargoWeight
         $("td").off()
     })
-        boxcarIdCell.textContent = Boxcar.ID
+        boxcarIdCell.textContent = Boxcar.Id
         divDTableBody.append(boxcarIdCell);
     });
-    function validateAddCargo () {}
+    cargoEntryForm.on('submit', (event) => {
+        event.preventDefault();
+        let boxcar = CONFIGUREDBOXCARS.find(boxcar => boxcar.Id === boxCarSelectedValue.val())
+        let Transport_ID = $("#Transport_ID_input").val()
+        let Description = $("#Description_input").val()
+        let Cargo_Weight = $("#DivD_Cargo_Weigh_input").val()
+        if (parseInt(Cargo_Weight) > boxcar.maxCargoWeight) {
+            let newCargo = new cargo(Transport_ID, Description, Cargo_Weight, "Warehouse")
+            WAREHOUSEMANIFEST.push(newCargo)
+            displayDivF()
+        }
+        else {
+            let newCargo = new cargo(Transport_ID, Description, parseInt(Cargo_Weight), boxcar.Id)
+            boxcar.cargo.push(newCargo)
+            displayDivE(boxcar)
+        }
+    })
 
+}
+
+function displayDivE(boxcar){
+    $("#divE").show()
+    const cargo = boxcar.cargo
+    let divETableBody = $("#divE").find("tbody");
+    console.log(boxcar.cargo)
+    $("#divE").find("h1").text(`CNA BOX CAR ${boxcar.Id} Manifest`)
+    divETableBody.empty()
+    cargo.forEach(cargo => {
+        let boxcarIdRow = document.createElement("tr");
+        let transportIdCell = document.createElement("td");
+        let descriptionCell = document.createElement("td");
+        let weightCell = document.createElement("td");
+        
+        divETableBody.append(boxcarIdRow);
+        transportIdCell.textContent = cargo.transportId
+        descriptionCell.textContent = cargo.description
+        weightCell.textContent = cargo.weight
+        divETableBody.append(transportIdCell, descriptionCell, weightCell);
+    })
+    
+
+
+}
+
+function returnToCreateFreight() {
+    $("#divE, #divD").toggle()
+    DisplayDivD()
+
+}
+
+function displayDivF() {   
+    $("#divF").show()
+
+    let divFTableBody = $("#divF").find("tbody");
+    $("#divF").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
+    divFTableBody.empty()
+    WAREHOUSEMANIFEST.forEach(cargo => {
+        console.log(cargo)
+        let boxcarIdRow = document.createElement("tr");
+        let transportIdCell = document.createElement("td");
+        let descriptionCell = document.createElement("td");
+        let weightCell = document.createElement("td");
+        
+        divFTableBody.append(boxcarIdRow);
+        transportIdCell.textContent = cargo.transportId
+        descriptionCell.textContent = cargo.description
+        weightCell.textContent = cargo.weight
+        divFTableBody.append(transportIdCell, descriptionCell, weightCell);
+    })
+    
 }
 
 $(function () {
     //main menu event listeners
+    $("input:radio").on('change', ()=>{$("#divA").toggle()})
     $("[name='menu']").prop('checked', false)
     $("#Create_boxcar_radio_btn").on('change', DisplayDivB)
     $("#Add_freight_radio_btn").on("change", DisplayDivD)
@@ -133,7 +213,7 @@ $(function () {
     $("#All_freight_status_radio_btn").on('change',)
 
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
-
+    $("#returnToCreateFreight").on('click', ()=>{console.log('hello')})
     //divb event listeners
    
 
