@@ -3,8 +3,8 @@
  * make it such that div c shows udirng the initla div b load if there is data
 */
 var WAREHOUSEMANIFEST = []
-var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
-// var Configured_Box_Cars = []
+// var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
+var CONFIGUREDBOXCARS = []
 
 function boxcar(Id, tareWeight, maxGrossWeight) {
     this.Id = Id
@@ -14,6 +14,9 @@ function boxcar(Id, tareWeight, maxGrossWeight) {
     this.cargo = []
     this.cargoWeight = () => {
         return this.cargo.reduce(function (acc, obj) { return acc + obj.weight; }, 0);
+    }
+    this.grossWeight = () => {
+        return this.cargoWeight() + this.tareWeight
     }}
 
 function cargo(transportId, description, weight, status) {
@@ -60,14 +63,14 @@ function DisplayDivB () {
         if (!(/BX\d{3}/).test($("#Boxcar_ID_input").val())) {
             $("#Boxcar_ID_input").next().text("Boxcar ID must be in the format BX123")
         }
-        else if (0 > parseInt($("#TAREWeight_input").val()) || parseInt($("#TAREWeight_input").val()) > 20000) {
-            $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200000")
+        else if (0 > parseInt($("#TAREWeight_input").val()) || parseInt($("#TAREWeight_input").val()) > 200000) {
+            $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200,000")
         }
         else if (parseInt($("#Max_Gross_Weight_input").val()) < parseInt($("#TAREWeight_input").val())) {
             $("#Max_Gross_Weight_input").next().text("Gross weight must be larger than TARE weight")
         }  
-        else if (0 > parseInt($("#Max_Gross_Weight_input").val()) || parseInt($("#Max_Gross_Weight_input").val()) > 20000) {
-            $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200000")}
+        else if (0 > parseInt($("#Max_Gross_Weight_input").val()) || parseInt($("#Max_Gross_Weight_input").val()) > 200000) {
+            $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
         // if all conditions pass add the box car to the array
         else {
 
@@ -97,19 +100,23 @@ function DisplayDivC() {
             divCTableBody.append(`<td>${Boxcar.Id}</td>`);
             divCTableBody.append(`<td>${Boxcar.tareWeight}</td>`); 
             divCTableBody.append(`<td>${Boxcar.maxGrossWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.cargoWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.grossWeight}</td>`); 
-            totalCargoWeight += parseInt(Boxcar.cargoWeight)
+            divCTableBody.append(`<td>${Boxcar.cargoWeight()}</td>`); 
+            divCTableBody.append(`<td>${parseInt(Boxcar.grossWeight())}</td>`); 
+            totalCargoWeight += parseInt(Boxcar.cargoWeight())
         });
         divCTableFooter.append(`Total Cargo Weight: ${totalCargoWeight}`)
     }
 } 
 
 function DisplayDivD () {
+    /*TODO
+    Reset Form on load for Return to freight button
+    add total cargo weight to tables E and F
+    add spam message for stuff thats too heavy
+    */
     $("#divD").toggle();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
-    let maxCargoWeight = 0;
     let cargoEntryForm = $("form")
     cargoEntryForm.off()
     $("#cargoForm :input").prop("disabled", true);
@@ -124,7 +131,6 @@ function DisplayDivD () {
         divDTableBody.removeClass("selectabletable");
         $("#cargoForm :input").prop("disabled", false);
         boxCarSelectedValue.val(Boxcar.Id)
-        maxCargoWeight = Boxcar.maxCargoWeight
         $("td").off()
     })
         boxcarIdCell.textContent = Boxcar.Id
@@ -132,11 +138,12 @@ function DisplayDivD () {
     });
     cargoEntryForm.on('submit', (event) => {
         event.preventDefault();
-        let boxcar = CONFIGUREDBOXCARS.find(boxcar => boxcar.Id === boxCarSelectedValue.val())
+        const boxcar = CONFIGUREDBOXCARS.find(boxcar => boxcar.Id === boxCarSelectedValue.val())
         let Transport_ID = $("#Transport_ID_input").val()
         let Description = $("#Description_input").val()
         let Cargo_Weight = $("#DivD_Cargo_Weigh_input").val()
-        if (parseInt(Cargo_Weight) > boxcar.maxCargoWeight) {
+        const maxCargoWeight = boxcar.maxCargoWeight - boxcar.cargoWeight()
+        if (parseInt(Cargo_Weight) > maxCargoWeight) {
             let newCargo = new cargo(Transport_ID, Description, Cargo_Weight, "Warehouse")
             WAREHOUSEMANIFEST.push(newCargo)
             displayDivF()
@@ -174,8 +181,13 @@ function displayDivE(boxcar){
 
 }
 
-function returnToCreateFreight() {
+function returnToCreateFreightE() {
     $("#divE, #divD").toggle()
+    DisplayDivD()
+
+}
+function returnToCreateFreightF() {
+    $("#divF, #divD").toggle()
     DisplayDivD()
 
 }
@@ -202,15 +214,54 @@ function displayDivF() {
     
 }
 
+function displayDivG() {
+    $("#divG").show()
+
+    let divGTableBody = $("#divG").find("tbody");
+    $("#divG").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
+    divGTableBody.empty()
+    WAREHOUSEMANIFEST.forEach(cargo => {
+        let freightStatusRow = document.createElement("tr");
+        let transportIdCell = document.createElement("td");
+        let descriptionCell = document.createElement("td");
+        let weightCell = document.createElement("td");
+        let statusCell = document.createElement("td");
+        
+        divGTableBody.append(freightStatusRow);
+        transportIdCell.textContent = cargo.transportId
+        descriptionCell.textContent = cargo.description
+        weightCell.textContent = cargo.weight
+        statusCell.textContent = "warehouse"
+        divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);
+    })
+    CONFIGUREDBOXCARS.forEach(Boxcar => {
+        Boxcar.cargo.forEach(cargo => {  
+            let freightStatusRow = document.createElement("tr");
+            let transportIdCell = document.createElement("td");
+            let descriptionCell = document.createElement("td");
+            let weightCell = document.createElement("td");
+            let statusCell = document.createElement("td");
+            
+            divGTableBody.append(freightStatusRow);
+            transportIdCell.textContent = cargo.transportId
+            descriptionCell.textContent = cargo.description
+            weightCell.textContent = cargo.weight
+            statusCell.textContent = cargo.status
+            divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);})
+    }
+    
+    )
+}
+
 $(function () {
     //main menu event listeners
     $("input:radio").on('change', ()=>{$("#divA").toggle()})
     $("[name='menu']").prop('checked', false)
     $("#Create_boxcar_radio_btn").on('change', DisplayDivB)
     $("#Add_freight_radio_btn").on("change", DisplayDivD)
-    $("#Boxcar_data_radio_btn").on('change',)
-    $("#Warehouse_data_radio_btn").on('change',)
-    $("#All_freight_status_radio_btn").on('change',)
+    $("#Boxcar_data_radio_btn").on('change',DisplayDivC)
+    $("#Warehouse_data_radio_btn").on('change',displayDivF)
+    $("#All_freight_status_radio_btn").on('change',displayDivG)
 
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
     $("#returnToCreateFreight").on('click', ()=>{console.log('hello')})
