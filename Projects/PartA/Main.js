@@ -1,39 +1,52 @@
 /*TODO: 
- * add functionality on divb for calculating gross weight and cargo weight
- * make it such that div c shows udirng the initla div b load if there is data
+ *  Reset DivD Form on load for Return to freight button
+    add total cargo weight to tables E and F
+    add spam message for diverting to warehouse
 */
+
+
 var WAREHOUSEMANIFEST = []
 // var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
 var CONFIGUREDBOXCARS = []
 
-function boxcar(Id, tareWeight, maxGrossWeight) {
-    this.Id = Id
-    this.tareWeight = tareWeight
-    this.maxGrossWeight = maxGrossWeight
-    this.maxCargoWeight = maxGrossWeight - tareWeight
-    this.cargo = []
-    this.cargoWeight = () => {
-        return this.cargo.reduce(function (acc, obj) { return acc + obj.weight; }, 0);
+class boxcar {
+    constructor(Id, tareWeight, maxGrossWeight) {
+        this.Id = Id
+        this.tareWeight = tareWeight
+        this.maxGrossWeight = maxGrossWeight
+        this.maxCargoWeight = maxGrossWeight - tareWeight
+        this.cargo = []
+        this.cargoWeight = () => {
+            return this.cargo.reduce(function (acc, obj) { return acc + obj.weight }, 0)
+        }
+        this.grossWeight = () => {
+            return this.cargoWeight() + this.tareWeight
+        }
     }
-    this.grossWeight = () => {
-        return this.cargoWeight() + this.tareWeight
-    }}
-
-function cargo(transportId, description, weight, status) {
-    this.transportId = transportId
-    this.description = description
-    this.weight = weight
-    this.status = status
 }
 
-function GENERATERANDOMBOXCAR() {
-    return new boxcar(
-        "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
-        (Math.floor(Math.random() * (500 - 100) ) + 100),
-        (Math.floor(Math.random() * (999 - 500) ) + 500),
-    )
+class cargo {
+    constructor(transportId, description, weight, status) {
+        this.transportId = transportId
+        this.description = description
+        this.weight = weight
+        this.status = status
+    }
 }
 
+
+// function GENERATERANDOMBOXCAR() {
+//     return new boxcar(
+//         "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
+//         (Math.floor(Math.random() * (500 - 100) ) + 100),
+//         (Math.floor(Math.random() * (999 - 500) ) + 500),
+//     )
+// }
+
+/**
+ * Function for returning to the div A main menu
+ * hides any current visible div's, displays div A, and clears all radio buttons
+ */
 function Handle_return_to_menu() {
     $("div").hide();
     $("#divA").toggle();
@@ -46,8 +59,9 @@ function Handle_return_to_menu() {
 function DisplayDivB () {
     $("#divB").toggle();
     $("form").on("submit", validate_create_boxcar)
+    if (CONFIGUREDBOXCARS.length > 0) {
     DisplayDivC();
-    
+    }
     /*
     * validation for the create box car form that ensures:
     * 
@@ -87,10 +101,12 @@ function DisplayDivB () {
 }
 
 function DisplayDivC() {
+    $("#divC").show();
     divCTableBody = $("#divC").find("tbody")
     divCTableFooter = $("#divC").find("tfoot")
+    
     if (CONFIGUREDBOXCARS.length > 0) {
-        $("#divC").show();
+        
         divCTableBody.empty()
         divCTableFooter.empty()
         console.log(CONFIGUREDBOXCARS)
@@ -109,16 +125,12 @@ function DisplayDivC() {
 } 
 
 function DisplayDivD () {
-    /*TODO
-    Reset Form on load for Return to freight button
-    add total cargo weight to tables E and F
-    add spam message for stuff thats too heavy
-    */
     $("#divD").toggle();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
-    let cargoEntryForm = $("form")
+    let cargoEntryForm = $("#cargoForm")
     cargoEntryForm.off()
+    cargoEntryForm[0].reset()
     $("#cargoForm :input").prop("disabled", true);
     divDTableBody.addClass("selectabletable");
     divDTableBody.empty();
@@ -276,5 +288,6 @@ $(function () {
     $('#return_to_create_box_car_btn').on('click', ()=>{
         $('#divC').hide()
         $('[name="create_boxcar"]')[0].reset()
+        $('#divB').show()
     })
 });
