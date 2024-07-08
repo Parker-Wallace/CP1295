@@ -1,4 +1,4 @@
-![image](https://github.com/Parker-Wallace/CP1295/assets/115728361/bbad62c9-6093-4adf-b554-6d00f8f35a54)# Welcome to the CP1295 Advanced JavaScript!
+# Welcome to the CP1295 Advanced JavaScript!
 
 > this course is a part of CNA's Software Development Co-op course and contains all distributable Materials.
 
