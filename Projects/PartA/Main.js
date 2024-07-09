@@ -1,20 +1,51 @@
+/**
+ * represents a boxcar
+ * @class
+ */
 class boxcar {
+    /**
+     * creates a new boxcar.
+     * @param {String} Id - the Id of this boxcar in the format BX\d{3}
+     * @param {number} tareWeight - the empty weight of this boxcar
+     * @param {String} maxGrossWeight - the maximum weight this boxcar can carry including tareweight
+     */
     constructor(Id, tareWeight, maxGrossWeight) {
         this.Id = Id
         this.tareWeight = tareWeight
         this.maxGrossWeight = maxGrossWeight
         this.maxCargoWeight = maxGrossWeight - tareWeight
         this.cargo = []
-        this.cargoWeight = () => {
+        }
+
+        /**
+         * Calculated the total weight of all the cargo on this boxcar
+         * @returns {number} the total weight of all the cargo on this boxcar
+         */
+        cargoWeight() {
             return this.cargo.reduce(function (acc, obj) { return acc + obj.weight }, 0)
         }
-        this.grossWeight = () => {
+        
+        /**
+         * Calculates the gross weight of the box car using tare weight and cargo weight
+         * @returns {number} the gross weight of this boxcar using cargoweight and tareweight
+         */
+        grossWeight() {
             return this.cargoWeight() + this.tareWeight
         }
     }
-}
 
+/**
+ * represents a shipment of cargo
+ * @class
+ */
 class cargo {
+    /**
+     * 
+     * @param {String} transportId - the transport id of this cargo unit
+     * @param {String} description - a basic description of this cargo
+     * @param {number} weight - the total weight of this cargo
+     * @param {String} status - the status of this cargo either "warehouse" or the @see boxcar#Id this cargo is contained in
+     */
     constructor(transportId, description, weight, status) {
         this.transportId = transportId
         this.description = description
@@ -24,19 +55,20 @@ class cargo {
 }
 
 var WAREHOUSEMANIFEST = []
-//var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
 var CONFIGUREDBOXCARS = []
 
-function GENERATERANDOMBOXCAR() {
-    return new boxcar(
-        "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
-        (Math.floor(Math.random() * (500 - 100) ) + 100),
-        (Math.floor(Math.random() * (999 - 500) ) + 500),
-    )
-}
+// var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
+// function GENERATERANDOMBOXCAR() {
+//     return new boxcar(
+//         "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
+//         (Math.floor(Math.random() * (500 - 100) ) + 100),
+//         (Math.floor(Math.random() * (999 - 500) ) + 500),
+//     )
+// }
 
 /**
- * Function for returning to the div A main menu
+ * Function for returning to the div A main menu.
+ * 
  * hides any current visible div's, displays div A, and clears all radio buttons
  */
 function Handle_return_to_menu() {
@@ -54,7 +86,7 @@ function DisplayDivB () {
     if (CONFIGUREDBOXCARS.length > 0) {
     DisplayDivC();
     }
-    /*
+    /**
     * validation for the create box car form that ensures:
     * 
     * Boxcar ID is in the form BX followed by 3 digits
@@ -93,12 +125,9 @@ function DisplayDivC() {
     $("#divC").show();
     divCTableBody = $("#divC").find("tbody")
     divCTableFooter = $("#divC").find("tfoot")
-    
-    if (CONFIGUREDBOXCARS.length > 0) {
-        
-        divCTableBody.empty()
-        divCTableFooter.empty()
-        console.log(CONFIGUREDBOXCARS)
+    divCTableBody.empty()
+    divCTableFooter.empty()
+    if (CONFIGUREDBOXCARS.length > 0) {    
         let totalCargoWeight = 0;
         CONFIGUREDBOXCARS.forEach(Boxcar => {
             divCTableBody.append(`<tr>`);
@@ -114,7 +143,7 @@ function DisplayDivC() {
 } 
 
 function DisplayDivD () {
-    $("#divD").toggle();
+    $("#divD").show();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
     let divDwarehouseSpan = $("#divD").find("span");
