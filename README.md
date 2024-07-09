@@ -22,3 +22,10 @@ included in this wiki and adjoining repository
 |[Assignment 02](https://github.com/Parker-Wallace/CP1295/tree/main/Assignments/A2)|Form Validation and basic error handling|
 |[Assignment 03](https://github.com/Parker-Wallace/CP1295/tree/main/Assignments/A3)|Working with timers to control events|
 
+### Projects
+
+| Name |Description|
+|---|---|
+|[Part A](https://github.com/Parker-Wallace/CP1295/tree/main/Projects/PartA)|Utilizing custom objects and passing information between elements|
+|[Part B](https://github.com/Parker-Wallace/CP1295/tree/main/Projects/PartB)|Further Utilization of custom objects|
+
