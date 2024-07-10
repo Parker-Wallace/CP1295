@@ -32,6 +32,18 @@ class boxcar {
         grossWeight() {
             return this.cargoWeight() + this.tareWeight
         }
+
+        /**
+         * static method which generates a random instance of boxcar
+         * @returns a randomized instance of boxcar
+         */
+        static generateRandomBoxcar() {
+            return new boxcar(
+                "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
+                (Math.floor(Math.random() * (500 - 100) ) + 100),
+                (Math.floor(Math.random() * (999 - 500) ) + 500),
+            )
+        }
     }
 
 /**
@@ -55,16 +67,7 @@ class cargo {
 }
 
 var WAREHOUSEMANIFEST = []
-var CONFIGUREDBOXCARS = []
-
-// var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
-// function GENERATERANDOMBOXCAR() {
-//     return new boxcar(
-//         "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
-//         (Math.floor(Math.random() * (500 - 100) ) + 100),
-//         (Math.floor(Math.random() * (999 - 500) ) + 500),
-//     )
-// }
+var CONFIGUREDBOXCARS = [boxcar.generateRandomBoxcar()]
 
 /**
  * Function for returning to the div A main menu.
@@ -81,32 +84,35 @@ function Handle_return_to_menu() {
 
 
 function DisplayDivB () {
-    $("#divB").toggle();
-    $("form").on("submit", validate_create_boxcar)
+    $("#divB").show();
+    $("#divA").hide();
     if (CONFIGUREDBOXCARS.length > 0) {
     DisplayDivC();
     }
-    /**
-    * validation for the create box car form that ensures:
-    * 
-    * Boxcar ID is in the form BX followed by 3 digits
-    * TARE weight is between 0 and 200000
-    * Max gross weight is Greater than TARE weight and between 0 and 200000 
-    */
-    function validate_create_boxcar(event){
-        //prevent default and clear any existing error messages
+
+    
+}
+
+/**
+ * validates boxcar creation form and adds the boxcar to the @see CONFIGUREDBOXCARS array
+ * @param {event} event the object which initiated the function
+ */
+function validate_create_boxcar(event){
         event.preventDefault();
-        $(this).find("span").text("")
-        if (!(/BX\d{3}$/).test($("#Boxcar_ID_input").val())) {
-            $("#Boxcar_ID_input").next().text("Boxcar ID must be in the format BX123")
+        let boxcarId = $("#Boxcar_ID_input").val();
+        let tareWeight = parseInt($("#TAREWeight_input").val());
+        let maxGrossWeight = parseInt($("#Max_Gross_Weight_input").val());
+        $(this).find("span").text("");
+        if (!(/BX\d{3}$/).test(boxcarId)) {
+            $("#Boxcar_ID_input").next().text("Boxcar ID must be in the format BX123");
         }
-        else if (0 > parseInt($("#TAREWeight_input").val()) || parseInt($("#TAREWeight_input").val()) > 200000) {
-            $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200,000")
+        else if (0 > tareWeight || tareWeight > 200000) {
+            $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200,000");
         }
-        else if (parseInt($("#Max_Gross_Weight_input").val()) < parseInt($("#TAREWeight_input").val())) {
-            $("#Max_Gross_Weight_input").next().text("Gross weight must be larger than TARE weight")
+        else if (maxGrossWeight < tareWeight) {
+            $("#Max_Gross_Weight_input").next().text("Gross weight must be larger than TARE weight");
         }  
-        else if (0 > parseInt($("#Max_Gross_Weight_input").val()) || parseInt($("#Max_Gross_Weight_input").val()) > 200000) {
+        else if (0 > maxGrossWeight || maxGrossWeight > 200000) {
             $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
         // if all conditions pass add the box car to the array
         else {
@@ -118,10 +124,10 @@ function DisplayDivB () {
             ))
             DisplayDivC()
         }
-}
-}
+    }
 
 function DisplayDivC() {
+    $("#divA").hide()
     $("#divC").show();
     divCTableBody = $("#divC").find("tbody")
     divCTableFooter = $("#divC").find("tfoot")
@@ -143,6 +149,7 @@ function DisplayDivC() {
 } 
 
 function DisplayDivD () {
+    $("#divA").hide()
     $("#divD").show();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
@@ -194,6 +201,7 @@ function DisplayDivD () {
 }
 
 function displayDivE(boxcar){
+    $("#divA").hide()
     $("#divE").show()
     const cargo = boxcar.cargo
     let divETableBody = $("#divE").find("tbody");
@@ -228,7 +236,8 @@ function displayDivE(boxcar){
 }
 
 
-function displayDivF() {   
+function displayDivF() { 
+    $("#divA").hide()  
     $("#divF").show()
     let alphabeticalcargo = []
     let divFTableBody = $("#divF").find("tbody");
@@ -260,6 +269,7 @@ function displayDivF() {
 }
 
 function displayDivG() {
+    $("#divA").hide()
     $("#divG").show()
     
     let divGTableBody = $("#divG").find("tbody");
@@ -310,24 +320,16 @@ function returnToCreateFreightF() {
 }
 
 $(function () {
-    //main menu event listeners
-    $("input:radio").on('change', ()=>{$("#divA").toggle()})
+    //initial page load
     $("[name='menu']").prop('checked', false)
-    $("#Create_boxcar_radio_btn").on('change', DisplayDivB)
-    $("#Add_freight_radio_btn").on("change", DisplayDivD)
-    $("#Boxcar_data_radio_btn").on('change',DisplayDivC)
-    $("#Warehouse_data_radio_btn").on('change',displayDivF)
-    $("#All_freight_status_radio_btn").on('change',displayDivG)
     
+    //div A event listeners
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
-    $("#returnToCreateFreight").on('click', ()=>{console.log('hello')})
-    //divb event listeners
-   
 
-    $("#DivB_Cargo_Weight_input").change(()=>{
-        console.log("chneg")
-        $("#Gross_Weight_input").val() = this.val() + parseInt($("#TAREWeight_input").val())
-    })
+
+    //divb event listeners
+    $("#createBoxcarForm").on("submit", validate_create_boxcar)
+
 
     $('#return_to_create_box_car_btn').on('click', ()=>{
         $('#divC').hide()
