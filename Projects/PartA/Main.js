@@ -67,7 +67,7 @@ class cargo {
 }
 
 var WAREHOUSEMANIFEST = []
-var CONFIGUREDBOXCARS = [boxcar.generateRandomBoxcar()]
+var CONFIGUREDBOXCARS = []
 
 /**
  * Function for returning to the div A main menu.
@@ -114,7 +114,6 @@ function validate_create_boxcar(event){
         }  
         else if (0 > maxGrossWeight || maxGrossWeight > 200000) {
             $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
-        // if all conditions pass add the box car to the array
         else {
 
             CONFIGUREDBOXCARS.push(new boxcar(
@@ -136,12 +135,20 @@ function DisplayDivC() {
     if (CONFIGUREDBOXCARS.length > 0) {    
         let totalCargoWeight = 0;
         CONFIGUREDBOXCARS.forEach(Boxcar => {
-            divCTableBody.append(`<tr>`);
-            divCTableBody.append(`<td>${Boxcar.Id}</td>`);
-            divCTableBody.append(`<td>${Boxcar.tareWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.maxGrossWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.cargoWeight()}</td>`); 
-            divCTableBody.append(`<td>${parseInt(Boxcar.grossWeight())}</td>`); 
+            let boxcarRow = document.createElement("tr")
+            let IdCell = document.createElement("td")
+            let tareWeightCell = document.createElement("td")
+            let maxGrossWeightCell = document.createElement("td")
+            let CargoWeightCell = document.createElement("td")
+            let GrossWeightCell = document.createElement("td")
+
+            IdCell.textContent = Boxcar.Id
+            tareWeightCell.textContent = Boxcar.tareWeight
+            maxGrossWeightCell.textContent = Boxcar.maxCargoWeight
+            CargoWeightCell.textContent = Boxcar.cargoWeight()
+            GrossWeightCell.textContent = parseInt(Boxcar.grossWeight())
+            boxcarRow.append(IdCell, tareWeightCell, maxGrossWeightCell, CargoWeightCell, GrossWeightCell)
+            divCTableBody.append(boxcarRow)
             totalCargoWeight += parseInt(Boxcar.cargoWeight())
         });
         divCTableFooter.append(`Total Cargo Weight: ${totalCargoWeight}`)
@@ -149,31 +156,30 @@ function DisplayDivC() {
 } 
 
 function DisplayDivD () {
-    $("#divA").hide()
+    $("#divA").hide();
     $("#divD").show();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
     let divDwarehouseSpan = $("#divD").find("span");
-    let cargoEntryForm = $("#cargoForm")
-    cargoEntryForm.off()
-    cargoEntryForm[0].reset()
+    let cargoEntryForm = $("#cargoForm");
+    cargoEntryForm.off();
+    cargoEntryForm[0].reset();
     $("#cargoForm :input").prop("disabled", true);
     divDTableBody.addClass("selectabletable");
     divDTableBody.empty();
-    
     CONFIGUREDBOXCARS.forEach(Boxcar => {
         let boxcarIdCell = document.createElement("td");
         let boxcarIdRow = document.createElement("tr");
-        divDTableBody.append(boxcarIdRow);
         $(boxcarIdCell).on('click', ()=>{   
-        divDTableBody.prop("disabled", true);
-        divDTableBody.removeClass("selectabletable");
-        $("#cargoForm :input").prop("disabled", false);
-        boxCarSelectedValue.val(Boxcar.Id)
-        $("td").off()
-    })
-        boxcarIdCell.textContent = Boxcar.Id
-        divDTableBody.append(boxcarIdCell);
+            divDTableBody.prop("disabled", true);
+            divDTableBody.removeClass("selectabletable");
+            $("#cargoForm :input").prop("disabled", false);
+            boxCarSelectedValue.val(Boxcar.Id);
+            $("td").off();
+        })
+        boxcarIdCell.textContent = Boxcar.Id;
+        boxcarIdRow.append(boxcarIdCell);
+        divDTableBody.append(boxcarIdRow);
     });
     cargoEntryForm.on('submit', (event) => {
         event.preventDefault();
@@ -333,7 +339,7 @@ $(function () {
 
     $('#return_to_create_box_car_btn').on('click', ()=>{
         $('#divC').hide()
-        $('[name="create_boxcar"]')[0].reset()
+        $('#createBoxcarForm')[0].reset()
         $('#divB').show()
     })
 });
