@@ -46,7 +46,18 @@ class boxcar {
         }
 }
 
+/**
+ * represents a shipment of cargo
+ * @class
+ */
 class cargo {
+    /**
+     * creates a new instance of cargo
+     * @param {String} transportId - the transport id of this cargo unit
+     * @param {String} description - a basic description of this cargo
+     * @param {number} weight - the total weight of this cargo
+     * @param {String} status - the status of this cargo either "warehouse" or the @see boxcar#Id this cargo is contained in
+     */
     constructor(transportId, description, weight, status) {
         this.transportId = transportId
         this.description = description
