@@ -1,28 +1,49 @@
-/*TODO: 
- *  Reset DivD Form on load for Return to freight button
-    add total cargo weight to tables E and F
-    add spam message for diverting to warehouse
-*/
-
-
-var WAREHOUSEMANIFEST = []
-// var CONFIGUREDBOXCARS = [GENERATERANDOMBOXCAR(), GENERATERANDOMBOXCAR()]
-var CONFIGUREDBOXCARS = []
-
+/**
+ * represents a boxcar
+ * @class
+ */
 class boxcar {
+    /**
+     * creates a new boxcar.
+     * @param {String} Id - the Id of this boxcar in the format BX\d{3}
+     * @param {number} tareWeight - the empty weight of this boxcar
+     * @param {String} maxGrossWeight - the maximum weight this boxcar can carry including tareweight
+     */
     constructor(Id, tareWeight, maxGrossWeight) {
         this.Id = Id
         this.tareWeight = tareWeight
         this.maxGrossWeight = maxGrossWeight
         this.maxCargoWeight = maxGrossWeight - tareWeight
         this.cargo = []
-        this.cargoWeight = () => {
+        }
+
+        /**
+         * Calculated the total weight of all the cargo on this boxcar
+         * @returns {number} the total weight of all the cargo on this boxcar
+         */
+        cargoWeight() {
             return this.cargo.reduce(function (acc, obj) { return acc + obj.weight }, 0)
         }
-        this.grossWeight = () => {
+        
+        /**
+         * Calculates the gross weight of the box car using tare weight and cargo weight
+         * @returns {number} the gross weight of this boxcar using cargoweight and tareweight
+         */
+        grossWeight() {
             return this.cargoWeight() + this.tareWeight
         }
-    }
+
+        /**
+         * static method which generates a random instance of boxcar
+         * @returns a randomized instance of boxcar
+         */
+        static generateRandomBoxcar() {
+            return new boxcar(
+                "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
+                (Math.floor(Math.random() * (500 - 100) ) + 100),
+                (Math.floor(Math.random() * (999 - 500) ) + 500),
+            )
+        }
 }
 
 class cargo {
