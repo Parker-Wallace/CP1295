@@ -44,7 +44,7 @@ class boxcar {
                 (Math.floor(Math.random() * (999 - 500) ) + 500),
             )
         }
-}
+    }
 
 /**
  * represents a shipment of cargo
@@ -95,135 +95,92 @@ function displayDivB () {
     } 
 }
 
-function DisplayDivC() {
+function displayDivC() {
+    $("#divA").hide()
     $("#divC").show();
-    divCTableBody = $("#divC").find("tbody")
-    divCTableFooter = $("#divC").find("tfoot")
-    
-    if (CONFIGUREDBOXCARS.length > 0) {
-        
-        divCTableBody.empty()
-        divCTableFooter.empty()
-        console.log(CONFIGUREDBOXCARS)
+    let tbody = $("#divC").find("tbody")
+    let tfoot = $("#divC").find("tfoot")
+    tbody.empty()
+    tfoot.empty()
+    if (TRAIN.boxcars.length > 0) {    
         let totalCargoWeight = 0;
-        CONFIGUREDBOXCARS.forEach(Boxcar => {
-            divCTableBody.append(`<tr>`);
-            divCTableBody.append(`<td>${Boxcar.Id}</td>`);
-            divCTableBody.append(`<td>${Boxcar.tareWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.maxGrossWeight}</td>`); 
-            divCTableBody.append(`<td>${Boxcar.cargoWeight()}</td>`); 
-            divCTableBody.append(`<td>${parseInt(Boxcar.grossWeight())}</td>`); 
+        TRAIN.boxcars.forEach(Boxcar => {
+            let boxcarRow = document.createElement("tr")
+            let IdCell = document.createElement("td")
+            let tareWeightCell = document.createElement("td")
+            let maxGrossWeightCell = document.createElement("td")
+            let CargoWeightCell = document.createElement("td")
+            let GrossWeightCell = document.createElement("td")
+            IdCell.textContent = Boxcar.Id
+            tareWeightCell.textContent = Boxcar.tareWeight
+            maxGrossWeightCell.textContent = Boxcar.maxCargoWeight
+            CargoWeightCell.textContent = Boxcar.cargoWeight()
+            GrossWeightCell.textContent = parseInt(Boxcar.grossWeight())
+            boxcarRow.append(IdCell, tareWeightCell, maxGrossWeightCell, CargoWeightCell, GrossWeightCell)
+            tbody.append(boxcarRow)
             totalCargoWeight += parseInt(Boxcar.cargoWeight())
         });
-        divCTableFooter.append(`Total Cargo Weight: ${totalCargoWeight}`)
+        let totalCargoWeightRow = document.createElement("tr")
+        let totalCargoWeightCell = document.createElement("td")
+        let totalCargoWeightDescriptionCell = document.createElement("td")
+        totalCargoWeightDescriptionCell.textContent = "Total Cargo Weight"
+        totalCargoWeightDescriptionCell.colSpan = 3
+        totalCargoWeightCell.textContent = totalCargoWeight
+        totalCargoWeightRow.append(totalCargoWeightDescriptionCell, totalCargoWeightCell)
+        tfoot.append(totalCargoWeightRow) 
     }
 } 
 
-function DisplayDivD () {
-    $("#divD").toggle();
+function displayDivD () {
+    $("#divA").hide();
+    $("#divD").show();
     let boxCarSelectedValue = $("#Box_Car_Selected_input");
     let divDTableBody = $("#divD").find("tbody");
-    let cargoEntryForm = $("#cargoForm")
-    cargoEntryForm.off()
-    cargoEntryForm[0].reset()
+    let cargoEntryForm = $("#cargoForm");
+    cargoEntryForm[0].reset();
     $("#cargoForm :input").prop("disabled", true);
     divDTableBody.addClass("selectabletable");
     divDTableBody.empty();
-    CONFIGUREDBOXCARS.forEach(Boxcar => {
+    TRAIN.boxcars.forEach(Boxcar => {
         let boxcarIdCell = document.createElement("td");
         let boxcarIdRow = document.createElement("tr");
-        divDTableBody.append(boxcarIdRow);
         $(boxcarIdCell).on('click', ()=>{   
-        divDTableBody.prop("disabled", true);
-        divDTableBody.removeClass("selectabletable");
-        $("#cargoForm :input").prop("disabled", false);
-        boxCarSelectedValue.val(Boxcar.Id)
-        $("td").off()
-    })
-        boxcarIdCell.textContent = Boxcar.Id
-        divDTableBody.append(boxcarIdCell);
+            divDTableBody.prop("disabled", true);
+            divDTableBody.removeClass("selectabletable");
+            $("#cargoForm :input").prop("disabled", false);
+            boxCarSelectedValue.val(Boxcar.Id);
+            $("td").off();
+        })
+        boxcarIdCell.textContent = Boxcar.Id;
+        boxcarIdRow.append(boxcarIdCell);
+        divDTableBody.append(boxcarIdRow);
     });
-    cargoEntryForm.on('submit', (event) => {
-        event.preventDefault();
-        const boxcar = CONFIGUREDBOXCARS.find(boxcar => boxcar.Id === boxCarSelectedValue.val())
-        let Transport_ID = $("#Transport_ID_input").val()
-        let Description = $("#Description_input").val()
-        let Cargo_Weight = $("#DivD_Cargo_Weigh_input").val()
-        const maxCargoWeight = boxcar.maxCargoWeight - boxcar.cargoWeight()
-        if (parseInt(Cargo_Weight) > maxCargoWeight) {
-            let newCargo = new cargo(Transport_ID, Description, Cargo_Weight, "Warehouse")
-            WAREHOUSEMANIFEST.push(newCargo)
-            displayDivF()
-        }
-        else {
-            let newCargo = new cargo(Transport_ID, Description, parseInt(Cargo_Weight), boxcar.Id)
-            boxcar.cargo.push(newCargo)
-            displayDivE(boxcar)
-        }
-    })
-
-}
+  }
 
 function displayDivE(boxcar){
+    $("#divA").hide()
     $("#divE").show()
-    const cargo = boxcar.cargo
-    let divETableBody = $("#divE").find("tbody");
-    console.log(boxcar.cargo)
-    $("#divE").find("h1").text(`CNA BOX CAR ${boxcar.Id} Manifest`)
-    divETableBody.empty()
-    cargo.forEach(cargo => {
-        let boxcarIdRow = document.createElement("tr");
-        let transportIdCell = document.createElement("td");
-        let descriptionCell = document.createElement("td");
-        let weightCell = document.createElement("td");
-        
-        divETableBody.append(boxcarIdRow);
-        transportIdCell.textContent = cargo.transportId
-        descriptionCell.textContent = cargo.description
-        weightCell.textContent = cargo.weight
-        divETableBody.append(transportIdCell, descriptionCell, weightCell);
+    $("#divE").find("table, h1").remove()
+    createManifestTable($("#divE"), boxcar.cargo)
+    $("#divE").find('button').detach().appendTo("#divE")
+}
+
+function displayDivF() {
+    div = $("#divF")
+    $("#divA").hide()  
+    div.show()
+    div.find("table, h1").remove()
+    STATIONS.forEach(stationwarehouse => {
+        createManifestTable(div, stationwarehouse.warehouseManifest)
     })
-    
-
-
-}
-
-function returnToCreateFreightE() {
-    $("#divE, #divD").toggle()
-    DisplayDivD()
-
-}
-function returnToCreateFreightF() {
-    $("#divF, #divD").toggle()
-    DisplayDivD()
-
-}
-
-function displayDivF() {   
-    $("#divF").show()
-
-    let divFTableBody = $("#divF").find("tbody");
-    $("#divF").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
-    divFTableBody.empty()
-    WAREHOUSEMANIFEST.forEach(cargo => {
-        console.log(cargo)
-        let boxcarIdRow = document.createElement("tr");
-        let transportIdCell = document.createElement("td");
-        let descriptionCell = document.createElement("td");
-        let weightCell = document.createElement("td");
-        
-        divFTableBody.append(boxcarIdRow);
-        transportIdCell.textContent = cargo.transportId
-        descriptionCell.textContent = cargo.description
-        weightCell.textContent = cargo.weight
-        divFTableBody.append(transportIdCell, descriptionCell, weightCell);
-    })
-    
+    div.find('button').detach().appendTo(div)
+ 
 }
 
 function displayDivG() {
+    $("#divA").hide()
     $("#divG").show()
-
+    
     let divGTableBody = $("#divG").find("tbody");
     $("#divG").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
     divGTableBody.empty()
@@ -241,7 +198,7 @@ function displayDivG() {
         statusCell.textContent = "warehouse"
         divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);
     })
-    CONFIGUREDBOXCARS.forEach(Boxcar => {
+    TRAIN.boxcars.forEach(Boxcar => {
         Boxcar.cargo.forEach(cargo => {  
             let freightStatusRow = document.createElement("tr");
             let transportIdCell = document.createElement("td");
@@ -255,7 +212,7 @@ function displayDivG() {
             weightCell.textContent = cargo.weight
             statusCell.textContent = cargo.status
             divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);})
-    }
+        }   
     )}
 
 /**
@@ -388,28 +345,29 @@ function Handle_return_to_menu() {
 }
 
 $(function () {
-    //main menu event listeners
-    $("input:radio").on('change', ()=>{$("#divA").toggle()})
+    //initial page load
     $("[name='menu']").prop('checked', false)
-    $("#Create_boxcar_radio_btn").on('change', DisplayDivB)
-    $("#Add_freight_radio_btn").on("change", DisplayDivD)
-    $("#Boxcar_data_radio_btn").on('change',DisplayDivC)
-    $("#Warehouse_data_radio_btn").on('change',displayDivF)
-    $("#All_freight_status_radio_btn").on('change',displayDivG)
-
+    
+    //div A event listeners
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
-    $("#returnToCreateFreight").on('click', ()=>{console.log('hello')})
-    //divb event listeners
-   
 
-    $("#DivB_Cargo_Weight_input").change(()=>{
-        console.log("chneg")
-        $("#Gross_Weight_input").val() = this.val() + parseInt($("#TAREWeight_input").val())
-    })
+
+    //form event listeners
+    $("#createBoxcarForm").on("submit", validateCreateBoxcar)
+    $("#cargoForm").on('submit', validateCreateCargo)
 
     $('#return_to_create_box_car_btn').on('click', ()=>{
         $('#divC').hide()
-        $('[name="create_boxcar"]')[0].reset()
+        $('#createBoxcarForm')[0].reset()
         $('#divB').show()
     })
-});
+
+    $(".returnToCreateFreight").on("click", (event) => {
+        $(event.currentTarget).parent("div").toggle();
+        $("#divD").toggle();
+        displayDivD();
+    })
+})
+
+// TODO
+// see if there isnt a better way to create div e and f without moving buttons around like a doofus
