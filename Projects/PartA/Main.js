@@ -67,7 +67,7 @@ class cargo {
 }
 
 var WAREHOUSEMANIFEST = []
-var CONFIGUREDBOXCARS = [boxcar.generateRandomBoxcar()]
+var CONFIGUREDBOXCARS = []
 
 
 
