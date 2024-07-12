@@ -256,8 +256,135 @@ function displayDivG() {
             statusCell.textContent = cargo.status
             divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);})
     }
+    )}
+
+/**
+ * function for creating the manifest table for Div E and F
+ * @param {Node} tbody the body element of the table
+ * @param {Node} tfoot the footer element of the table
+ * @param {Array.<cargo>} cargoArray the array of cargo objects to be appended to the table
+ */
+function createManifestTable(manifestdiv,  cargoArray) {
+    let tableTitle = document.createElement('h1')
+    let table = createTable(["Transport ID", "Description", "Weight"])
+    let tbody = table.querySelector('tbody')
+    let tfoot = table.querySelector('tfoot')
+    let totalCargoWeight = 0
+    cargoArray.forEach(cargoUnit => {
+        let boxcarIdRow = document.createElement("tr");
+        let transportIdCell = document.createElement("td");
+        let descriptionCell = document.createElement("td");
+        let weightCell = document.createElement("td");
+        
+        tbody.append(boxcarIdRow);
+        transportIdCell.textContent = cargoUnit.transportId
+        descriptionCell.textContent = cargoUnit.description
+        weightCell.textContent = cargoUnit.weight
+        totalCargoWeight += parseInt(cargoUnit.weight)
+        tbody.append(transportIdCell, descriptionCell, weightCell);
+        tableTitle.textContent = cargoUnit.status
+    })
+    let totalCargoWeightRow = document.createElement("tr")
+    let totalCargoWeightCell = document.createElement("td")
+    let totalCargoWeightDescriptionCell = document.createElement("td")
+    totalCargoWeightDescriptionCell.textContent = "Total Cargo Weight"
+    totalCargoWeightDescriptionCell.colSpan = 2
+    totalCargoWeightCell.textContent = totalCargoWeight
+    totalCargoWeightRow.append(totalCargoWeightDescriptionCell, totalCargoWeightCell)
+    tfoot.append(totalCargoWeightRow)
     
-    )
+    manifestdiv.append(tableTitle, table)
+}
+
+function createTable(headers){
+    let table = document.createElement('table')
+    let tableHead = document.createElement('thead')
+    let tableHeaderRow = document.createElement('tr')
+    let tableBody = document.createElement('tbody')
+    let tableFooter = document.createElement('tfoot')
+    headers.forEach(header => {
+        let headerColumn = document.createElement('th')
+        headerColumn.textContent = header
+        tableHeaderRow.appendChild(headerColumn)
+    })
+    tableHead.appendChild(tableHeaderRow)
+    table.appendChild(tableHead)
+    table.appendChild(tableBody)
+    table.appendChild(tableFooter)
+    return (table)
+}
+
+/**
+ * validates boxcar creation form and adds the boxcar to the @see TRAIN.boxcars array
+ * @param {Event} event the object which initiated the function
+ */
+function validateCreateBoxcar(event){
+    event.preventDefault();
+    $(event.currentTarget).find("span").text("");
+    let boxcarId = $("#Boxcar_ID_input").val();
+    let tareWeight = parseInt($("#TAREWeight_input").val());
+    let maxGrossWeight = parseInt($("#Max_Gross_Weight_input").val());
+
+    
+    if (!(/BX\d{3}$/).test(boxcarId)) {
+        $("#Boxcar_ID_input").next().text("Boxcar ID must be in the format BX123");
+    }
+    else if (0 > tareWeight || tareWeight > 200000) {
+        $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200,000");
+    }
+    else if (maxGrossWeight < tareWeight) {
+        $("#Max_Gross_Weight_input").next().text("Gross weight must be larger than TARE weight");
+    }  
+    else if (0 > maxGrossWeight || maxGrossWeight > 200000) {
+        $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
+    else {
+        TRAIN.boxcars.push(new boxcar(
+        $(this[0]).val(),
+        $(this[1]).val(),
+        $(this[2]).val(),
+        ))
+        displayDivC()
+    }
+}
+
+function validateCreateCargo(event) {
+    event.preventDefault();
+    let divDwarehouseSpan = $("#divD").find("span");
+    let boxCarSelectedValue = $("#Box_Car_Selected_input").val();
+    let Transport_ID = $("#Transport_ID_input").val()
+    let Description = $("#Description_input").val()
+    let Cargo_Weight = parseInt($("#DivD_Cargo_Weigh_input").val())
+    const boxcar = TRAIN.boxcars.find(boxcar => boxcar.Id === boxCarSelectedValue)
+    const maxCargoWeight = boxcar.maxCargoWeight - boxcar.cargoWeight()
+    divDwarehouseSpan.text('')
+    if (!(/[a-zA-Z]{3}\d{4}S0[1-4]/).test(Transport_ID)) {
+        divDwarehouseSpan.text('Transport id must be in the format XXX1234S0 (1 - 4)')
+    }
+    else{
+    if (Cargo_Weight > maxCargoWeight) {
+        let newCargo = new cargo(Transport_ID, Description, Cargo_Weight, STATIONS[CURRENTDAY-1].Id)
+        STATIONS[0].warehouseManifest.push(newCargo)
+        divDwarehouseSpan.text("Weight Exceeds boxcar weight... diverting to warehouse")
+        $("#divF, #divE").hide()
+        displayDivF()
+    }
+    else {
+        let newCargo = new cargo(Transport_ID, Description, Cargo_Weight, boxcar.Id)
+        boxcar.cargo.push(newCargo)
+        $("#divF, #divE").hide()
+        displayDivE(boxcar)
+    }}
+}
+
+/**
+ * Function for returning to the div A main menu.
+ * 
+ * hides any current visible div's, displays div A, and clears all radio buttons
+ */
+function Handle_return_to_menu() {
+    $("div").hide();
+    $("#divA").toggle();
+    $("[name='menu']").prop('checked', false);
 }
 
 $(function () {
