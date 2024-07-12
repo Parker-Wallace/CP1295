@@ -63,73 +63,36 @@ class cargo {
         this.description = description
         this.weight = weight
         this.status = status
+        this.destination = transportId.substring(transportId.length - 3)
     }
 }
 
-
-// function GENERATERANDOMBOXCAR() {
-//     return new boxcar(
-//         "BX" + (Math.floor(Math.random() * (999 - 100) ) + 100),
-//         (Math.floor(Math.random() * (500 - 100) ) + 100),
-//         (Math.floor(Math.random() * (999 - 500) ) + 500),
-//     )
-// }
-
-/**
- * Function for returning to the div A main menu
- * hides any current visible div's, displays div A, and clears all radio buttons
- */
-function Handle_return_to_menu() {
-    $("div").hide();
-    $("#divA").toggle();
-    $("[name='menu']").prop('checked', false);
-
-}
-
-
-
-function DisplayDivB () {
-    $("#divB").toggle();
-    $("form").on("submit", validate_create_boxcar)
-    if (CONFIGUREDBOXCARS.length > 0) {
-    DisplayDivC();
+class station {
+    constructor(stationId) {
+    this.Id = stationId
+    this.warehouseManifest = []
     }
-    /*
-    * validation for the create box car form that ensures:
-    * 
-    * Boxcar ID is in the form BX followed by 3 digits
-    * TARE weight is between 0 and 200000
-    * Max gross weight is Greater than TARE weight and between 0 and 200000 
-    */
-    function validate_create_boxcar(event){
-        //prevent default and clear any existing error messages
-        event.preventDefault();
-        $(this).find("span").text("")
-        
-        if (!(/BX\d{3}/).test($("#Boxcar_ID_input").val())) {
-            $("#Boxcar_ID_input").next().text("Boxcar ID must be in the format BX123")
-        }
-        else if (0 > parseInt($("#TAREWeight_input").val()) || parseInt($("#TAREWeight_input").val()) > 200000) {
-            $("#TAREWeight_input").next().text("TARE weight ust be between 0 and 200,000")
-        }
-        else if (parseInt($("#Max_Gross_Weight_input").val()) < parseInt($("#TAREWeight_input").val())) {
-            $("#Max_Gross_Weight_input").next().text("Gross weight must be larger than TARE weight")
-        }  
-        else if (0 > parseInt($("#Max_Gross_Weight_input").val()) || parseInt($("#Max_Gross_Weight_input").val()) > 200000) {
-            $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
-        // if all conditions pass add the box car to the array
-        else {
 
-            CONFIGUREDBOXCARS.push(new boxcar(
-            $(this[0]).val(),
-            $(this[1]).val(),
-            $(this[2]).val(),
-            $(this[3]).val(),
-            $(this[4]).val()
-            ))
-            DisplayDivC()
-        }
+    cargoWeight() {
+        return this.cargo.reduce(function (acc, obj) { return acc + obj.weight }, 0)
+    }
 }
+
+var STATIONS = [new station("S01"), new station("S02"), new station("S03"), new station("S04")]
+var WAREHOUSEMANIFEST = []
+var TRAIN = {
+    boxcars:[],
+    location:STATIONS[0]
+}
+
+var CURRENTDAY = 1
+
+function displayDivB () {
+    $("#divB").show();
+    $("#divA").hide();
+    if (TRAIN.boxcars.length > 0) {
+    displayDivC();
+    } 
 }
 
 function DisplayDivC() {
