@@ -36,6 +36,20 @@ $(document).ready( () => {
         $("#score").focus(); 
     });
 
+    $("#delete_score").click(()=>{
+        const index = parseInt($("#delete").val())
+        console.log(typeof(index))
+
+        if (isNaN(index) || index < 0 || index > scores.length - 1) {
+            $("#delete_score").next().text("Index must exist in score list."); 
+        }
+        else {
+            $("#delete_score").next().text("");
+            scores.splice(index, 1)
+            $("#all").text(scores.join(", "));
+        }
+    })
+
     // set focus on initial load
     $("#score").focus();
 });
