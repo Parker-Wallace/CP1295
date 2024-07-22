@@ -1,0 +1,34 @@
+#babatext {
+    display: flex;
+    flex-wrap: wrap;
+    margin: auto;
+    padding: 10%;
+}
+
+.bababrick {
+    font-family:cursive;
+    width: 5vw; /* Use viewport width units */
+    height: 5vw; /* Ensure height matches width for square shape */
+    border: 1px solid #000;
+    display: flex;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    word-break: break-all;
+    overflow: hidden;
+    animation: wiggle 0.3s infinite; /* Apply wiggle animation */
+}
+
+body {
+    background-color: #000;
+}
+
+@keyframes wiggle {
+    0%, 100% {
+        transform: rotate(-1deg);
+    }
+    50% {
+        transform: rotate(1deg);
+    }
+}
