@@ -1,5 +1,5 @@
 /**
- * represents a boxcar
+ * Represents a boxcar
  * @class
  */
 class boxcar {
@@ -47,7 +47,7 @@ class boxcar {
     }
 
 /**
- * represents a shipment of cargo
+ * Represents a shipment of cargo
  * @class
  */
 class cargo {
@@ -343,6 +343,13 @@ function Handle_return_to_menu() {
     $("#divA").toggle();
     $("[name='menu']").prop('checked', false);
 }
+
+function Advance_Day() {
+    CURRENTDAY += 1
+    $("#dayCounter").val(CURRENTDAY)
+    TRAIN.location = STATIONS[Math.min(CURRENTDAY - 1, STATIONS.length - 1)]
+    console.log(TRAIN.location)
+};
 
 $(function () {
     //initial page load
