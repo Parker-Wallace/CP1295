@@ -79,7 +79,6 @@ class station {
 }
 
 var STATIONS = [new station("S01"), new station("S02"), new station("S03"), new station("S04")]
-var WAREHOUSEMANIFEST = []
 var TRAIN = {
     boxcars:[],
     location:STATIONS[0]
@@ -184,21 +183,7 @@ function displayDivG() {
     let divGTableBody = $("#divG").find("tbody");
     $("#divG").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
     divGTableBody.empty()
-    WAREHOUSEMANIFEST.forEach(cargo => {
-        let freightStatusRow = document.createElement("tr");
-        let transportIdCell = document.createElement("td");
-        let descriptionCell = document.createElement("td");
-        let weightCell = document.createElement("td");
-        let statusCell = document.createElement("td");
-        
-        divGTableBody.append(freightStatusRow);
-        transportIdCell.textContent = cargo.transportId
-        descriptionCell.textContent = cargo.description
-        weightCell.textContent = cargo.weight
-        statusCell.textContent = "warehouse"
-        divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);
-    })
-    TRAIN.boxcars.forEach(Boxcar => {
+        TRAIN.boxcars.forEach(Boxcar => {
         Boxcar.cargo.forEach(cargo => {  
             let freightStatusRow = document.createElement("tr");
             let transportIdCell = document.createElement("td");
@@ -211,7 +196,7 @@ function displayDivG() {
             descriptionCell.textContent = cargo.description
             weightCell.textContent = cargo.weight
             statusCell.textContent = cargo.status
-            divGTableBody.append(transportIdCell, descriptionCell, weightCell, statusCell);})
+            freightStatusRow.append(transportIdCell, descriptionCell, weightCell, statusCell);})
         }   
     )}
 
@@ -296,10 +281,7 @@ function validateCreateBoxcar(event){
         $("#Max_Gross_Weight_input").next().text("Max gross weight must be between 0 and 200,000")}
     else {
         TRAIN.boxcars.push(new boxcar(
-        $(this[0]).val(),
-        $(this[1]).val(),
-        $(this[2]).val(),
-        ))
+        boxcarId,tareWeight, maxGrossWeight))
         displayDivC()
     }
 }
@@ -345,15 +327,38 @@ function Handle_return_to_menu() {
 }
 
 function Advance_Day() {
+    $('input').prop('disabled', true)
     CURRENTDAY += 1
     $("#dayCounter").val(CURRENTDAY)
     TRAIN.location = STATIONS[Math.min(CURRENTDAY - 1, STATIONS.length - 1)]
     console.log(TRAIN.location)
+    TRAIN.boxcars.forEach(boxcar => {
+        boxcar.cargo.forEach(cargo => {
+            console.log(cargo.destination)
+        })
+    });
 };
 
+function offLoadCargo() {}
+const TESTING = () => {
+    let sampleBoxcar1 = new boxcar("BX500", 12000, 90000 );
+    let sampleBoxcar2 = new boxcar("BX505", 15000, 105000 );
+    let sampleBoxcar3 = new boxcar("BX520", 10000, 80000 );
+    let sampleCargo1 = new cargo("TXL2031S01", "50000 Shirts", 25000, "BX500");
+    let sampleCargo2 = new cargo("MED2033S01", "Medical MX45000", 16000, "BX505");
+    let sampleCargo3 = new cargo("CSX2037S01", "Lamp Oil K1 Drum", 10000, "BX520");
+    let sampleCargo4 = new cargo("TXL2031S02", "30000 Coats", 30000, "BX500");
+    let sampleCargo5 = new cargo("MED2033S02", "Medical MX34111", 16000, "BX505");
+    let sampleCargo6 = new cargo("CSZ2039S02", "Fuel Dsl G1 10000L BL", 8320, "BX520");
+    sampleBoxcar1.cargo.push(sampleCargo1, sampleCargo4);
+    sampleBoxcar2.cargo.push(sampleCargo2, sampleCargo5);
+    sampleBoxcar3.cargo.push(sampleCargo3, sampleCargo6);
+    TRAIN.boxcars.push(sampleBoxcar1, sampleBoxcar2, sampleBoxcar3);
+} 
 $(function () {
     //initial page load
     $("[name='menu']").prop('checked', false)
+    $("#dayCounter").val(1)
     
     //div A event listeners
     $(".Return_to_main_page_btn").on("click", Handle_return_to_menu)
@@ -374,7 +379,9 @@ $(function () {
         $("#divD").toggle();
         displayDivD();
     })
+    TESTING()
 })
 
 // TODO
 // see if there isnt a better way to create div e and f without moving buttons around like a doofus
+
