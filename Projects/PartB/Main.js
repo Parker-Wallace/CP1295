@@ -200,6 +200,16 @@ function displayDivG() {
         }   
     )}
 
+function displaySystemSummery() {
+    let totalboxcarweight = TRAIN.boxcars.reduce(function(acc, obj){return acc + obj.cargoWeight()}, 0);
+    let totalWarehouseWeight = STATIONS.reduce(function(acc, obj){return acc + obj.warehouseManifest.reduce(function(acc, obj){return acc + obj.weight}, 0)}, 0)
+    document.cookie = `BoxcarWeight=${totalboxcarweight}; path=/`
+    document.cookie = `warehouseWeight=${totalWarehouseWeight}; path=/`
+        document.cookie = `totalRailSystemWeight=${totalWarehouseWeight + totalboxcarweight}; path=/`
+    window.location.href='Summary.html'
+
+}
+
 /**
  * function for creating the manifest table for Div E and F
  * @param {Node} tbody the body element of the table
@@ -326,33 +336,47 @@ function Handle_return_to_menu() {
     $("[name='menu']").prop('checked', false);
 }
 
+function return_to_main_page() {
+    window.location.href='index.html'
+}
+
 function Advance_Day() {
-    $('input').prop('disabled', true)
+    // $('input').prop('disabled', true)
     CURRENTDAY += 1
     $("#dayCounter").val(CURRENTDAY)
     TRAIN.location = STATIONS[Math.min(CURRENTDAY - 1, STATIONS.length - 1)]
     console.log(TRAIN.location)
     TRAIN.boxcars.forEach(boxcar => {
-        boxcar.cargo.forEach(cargo => {
-            console.log(cargo.destination)
-        })
+        for (let i = 0; i < boxcar.cargo.length; i++) {
+            const cargo = boxcar.cargo[i];
+            if (cargo.destination == TRAIN.location.Id) {
+                cargo.status = cargo.destination
+                TRAIN.location.warehouseManifest.push(cargo);
+                boxcar.cargo.splice(i, 1);
+                i--;
+            }
+            
+        }
     });
 };
 
 function offLoadCargo() {}
+
+
 const TESTING = () => {
     let sampleBoxcar1 = new boxcar("BX500", 12000, 90000 );
     let sampleBoxcar2 = new boxcar("BX505", 15000, 105000 );
     let sampleBoxcar3 = new boxcar("BX520", 10000, 80000 );
-    let sampleCargo1 = new cargo("TXL2031S01", "50000 Shirts", 25000, "BX500");
-    let sampleCargo2 = new cargo("MED2033S01", "Medical MX45000", 16000, "BX505");
-    let sampleCargo3 = new cargo("CSX2037S01", "Lamp Oil K1 Drum", 10000, "BX520");
-    let sampleCargo4 = new cargo("TXL2031S02", "30000 Coats", 30000, "BX500");
-    let sampleCargo5 = new cargo("MED2033S02", "Medical MX34111", 16000, "BX505");
-    let sampleCargo6 = new cargo("CSZ2039S02", "Fuel Dsl G1 10000L BL", 8320, "BX520");
+    let sampleCargo1 = new cargo("TXL2031S02", "50000 Shirts", 25000, "BX500");
+    let sampleCargo2 = new cargo("MED2033S02", "Medical MX45000", 16000, "BX505");
+    let sampleCargo3 = new cargo("CSX2037S02", "Lamp Oil K1 Drum", 10000, "BX520");
+    let sampleCargo4 = new cargo("TXL2031S03", "30000 Coats", 30000, "BX500");
+    let sampleCargo5 = new cargo("MED2033S03", "Medical MX34111", 16000, "BX505");
+    let sampleCargo6 = new cargo("CSZ2039S03", "Fuel Dsl G1 10000L BL", 8320, "BX520");
+    let sampleCargo7 = new cargo("CSZ2041S04", "Fuel Dsl G2 9000L BL", 7928, "BX520");
     sampleBoxcar1.cargo.push(sampleCargo1, sampleCargo4);
     sampleBoxcar2.cargo.push(sampleCargo2, sampleCargo5);
-    sampleBoxcar3.cargo.push(sampleCargo3, sampleCargo6);
+    sampleBoxcar3.cargo.push(sampleCargo3, sampleCargo6, sampleCargo7);
     TRAIN.boxcars.push(sampleBoxcar1, sampleBoxcar2, sampleBoxcar3);
 } 
 $(function () {
