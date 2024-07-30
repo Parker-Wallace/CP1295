@@ -408,4 +408,5 @@ $(function () {
 
 // TODO
 // see if there isnt a better way to create div e and f without moving buttons around like a doofus
+// check All Freight Status Req's
 
