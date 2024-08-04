@@ -177,14 +177,24 @@ function displayDivF() {
 }
 
 function displayDivG() {
-    $("#divA").hide()
-    $("#divG").show()
+    $("#divA").hide();
+    $("#divG").show();
     
+    let allCargo = [];
     let divGTableBody = $("#divG").find("tbody");
     $("#divG").find("h1").text(`CNA - Warehouse Manifest - Station AAAA`)
     divGTableBody.empty()
-        TRAIN.boxcars.forEach(Boxcar => {
-        Boxcar.cargo.forEach(cargo => {  
+    STATIONS.forEach(station => {
+        station.warehouseManifest.forEach(cargo => {
+            allCargo.push(cargo)
+        })
+    })
+    TRAIN.boxcars.forEach(Boxcar => {
+        Boxcar.cargo.forEach(cargo => { 
+            allCargo.push(cargo)
+         })})
+        
+        allCargo.forEach(cargo => {  
             let freightStatusRow = document.createElement("tr");
             let transportIdCell = document.createElement("td");
             let descriptionCell = document.createElement("td");
@@ -198,7 +208,7 @@ function displayDivG() {
             statusCell.textContent = cargo.status
             freightStatusRow.append(transportIdCell, descriptionCell, weightCell, statusCell);})
         }   
-    )}
+   
 
 function displaySystemSummery() {
     let totalboxcarweight = TRAIN.boxcars.reduce(function(acc, obj){return acc + obj.cargoWeight()}, 0);
@@ -228,12 +238,12 @@ function createManifestTable(manifestdiv,  cargoArray) {
         let descriptionCell = document.createElement("td");
         let weightCell = document.createElement("td");
         
-        tbody.append(boxcarIdRow);
         transportIdCell.textContent = cargoUnit.transportId
         descriptionCell.textContent = cargoUnit.description
         weightCell.textContent = cargoUnit.weight
         totalCargoWeight += parseInt(cargoUnit.weight)
-        tbody.append(transportIdCell, descriptionCell, weightCell);
+        boxcarIdRow.append(transportIdCell, descriptionCell, weightCell);
+        tbody.append(boxcarIdRow);
         tableTitle.textContent = cargoUnit.status
     })
     let totalCargoWeightRow = document.createElement("tr")
@@ -364,8 +374,8 @@ function offLoadCargo() {}
 
 
 const TESTING = () => {
-    let sampleBoxcar1 = new boxcar("BX500", 12000, 90000 );
-    let sampleBoxcar2 = new boxcar("BX505", 15000, 105000 );
+    let sampleBoxcar1 = new boxcar("BX500", 15000, 105000 );
+    let sampleBoxcar2 = new boxcar("BX505", 12000, 90000 );
     let sampleBoxcar3 = new boxcar("BX520", 10000, 80000 );
     let sampleCargo1 = new cargo("TXL2031S02", "50000 Shirts", 25000, "BX500");
     let sampleCargo2 = new cargo("MED2033S02", "Medical MX45000", 16000, "BX505");
@@ -403,9 +413,5 @@ $(function () {
         $("#divD").toggle();
         displayDivD();
     })
-    TESTING()
+    //TESTING()
 })
-
-// TODO
-// see if there isnt a better way to create div e and f without moving buttons around like a doofus
-
