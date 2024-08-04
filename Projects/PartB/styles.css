@@ -36,6 +36,7 @@ input {
 
 span {
     color: red;
+    display: block;
 }
 
 button {
